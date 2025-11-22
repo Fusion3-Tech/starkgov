@@ -1,33 +1,51 @@
-"use client";
+'use client';
 
-import ActiveProposalsTable from "@/components/ActiveProposalsTable";
-import DelegatesCountCard from "@/components/DelegatesCountCard";
-import Header from "@/components/Header";
-import ParticipationRateCard from "@/components/ParticipationRateCard";
-import RecentlyPassedCard from "@/components/RecentlyPassedCard";
-import RecentlyRejectedCard from "@/components/RecentlyRejected";
-import Sidebar from "@/components/Sidebar";
-import { useProposals } from "@/hooks/useProposals";
+import styles from './Dashboard.module.scss';
 
-export default function Page() {
-  const { data, loading, error } = useProposals();
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
+import TotalVstrkChart from '@/components/TotalVstrkChart';
+import TopDelegationsCard from '@/components/TopDelegationsCard';
+import ParticipationRateCard from '@/components/ParticipationRateCard';
+import DelegatesCountCard from '@/components/DelegatesCountCard';
+import RecentlyPassedCard from '@/components/RecentlyPassedCard';
+import RecentlyRejectedCard from '@/components/RecentlyRejectedCard';
+import ActiveProposalsTable from '@/components/ActiveProposalsTable';
 
-  if (loading) return <div>Loading…</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  console.log(data);
+export default function DashboardPage() {
   return (
-    <div>
-      {data.map((proposal: any) => (
-        <div key={proposal.snapshot}>{proposal.metadata.title}</div>
-      ))}
-      <Header />
+    <div className={styles.shell}>
       <Sidebar />
-      <ActiveProposalsTable />
-      <RecentlyPassedCard />
-      <RecentlyRejectedCard />
-      <ParticipationRateCard />
-      <DelegatesCountCard />
+
+      <div className={styles.main}>
+        <Header />
+
+        <div className={styles.grid}>
+          {/* Row 1 */}
+          <div className={styles.chartArea}>
+            <TotalVstrkChart />
+          </div>
+
+          <div className={styles.delegationsArea}>
+            <TopDelegationsCard />
+          </div>
+
+          <div className={styles.statsArea}>
+            <ParticipationRateCard />
+            <DelegatesCountCard />
+          </div>
+
+          {/* Row 2 */}
+          <div className={styles.activeProposalsArea}>
+            <ActiveProposalsTable />
+          </div>
+
+          <div className={styles.recentArea}>
+            <RecentlyPassedCard />
+            <RecentlyRejectedCard />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

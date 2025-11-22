@@ -1,0 +1,112 @@
+.shell {
+  min-height: 100vh;
+  width: 100%;
+  background: #edf2fb;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* right side (everything except sidebar) */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Unified content grid
+   3 columns:
+   - col1: chart + active proposals
+   - col2: top 10 + active proposals
+   - col3: stats + recent cards
+*/
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2.4fr 1.8fr 1.2fr;
+  grid-template-rows: 260px auto; /* fixed top-row height */
+  gap: 16px;
+}
+
+/* --- TOP ROW ---------------------------------------------------- */
+
+.chartArea {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+}
+
+.delegationsArea {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+}
+
+.statsArea {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Make cards in the top row stretch to row height */
+.chartArea > *,
+.delegationsArea > *,
+.statsArea > * {
+  flex: 1;
+}
+
+/* --- BOTTOM ROW ------------------------------------------------- */
+
+.activeProposalsArea {
+  grid-column: 1 / 3; /* span first two columns */
+  grid-row: 2;
+}
+
+.recentArea {
+  grid-column: 3;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: flex-start;
+}
+
+/* --- RESPONSIVE ------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .shell {
+    padding: 14px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .chartArea,
+  .delegationsArea,
+  .statsArea,
+  .activeProposalsArea,
+  .recentArea {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .statsArea {
+    flex-direction: row;
+  }
+
+  .statsArea > * {
+    flex: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .shell {
+    flex-direction: column;
+  }
+}
