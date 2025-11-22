@@ -8,9 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.17",
+    "@snapshot-labs/pineapple": "^1.2.1",
+    "@snapshot-labs/snapshot.js": "^0.14.17",
+    "@snapshot-labs/sx": "^0.1.9",
     "next": "16.0.3",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "sass": "^1.94.2",
+    "starknet": "^7.6.4"
   },
   "devDependencies": {
     "@types/node": "^20",
