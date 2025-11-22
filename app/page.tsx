@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <div>
       {data.map((proposal: any) => (
-        <div key={proposal.id}>{proposal.title}</div>
+        <div key={proposal.snapshot}>{proposal.metadata.title}</div>
       ))}
     </div>
   );
