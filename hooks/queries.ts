@@ -1,8 +1,9 @@
 import { gql } from "@apollo/client";
 
+// TODO: filter based on `space`.
 export const GET_PROPOSALS_QUERY = gql`
-  query ProposalsSnapshotX($space: String!) {
-    proposals(where: { space_in: [$space] }) {
+  query ProposalsSnapshotX {
+    proposals {
       snapshot
       id
       start
