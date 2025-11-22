@@ -10,8 +10,6 @@ export const transformProposalData = (data: any) => {
 
 export const transformProposal = (proposal: any) => {
   const timeNow = Date.now();
-  return proposal;
-  /*
   return {
     ...proposal,
     ...proposal.metadata,
@@ -39,7 +37,6 @@ export const transformProposal = (proposal: any) => {
     ],
     state: getProposalState(proposal, timeNow),
   };
-  */
 };
 
 function getProposalState(proposal: any, current: number) {

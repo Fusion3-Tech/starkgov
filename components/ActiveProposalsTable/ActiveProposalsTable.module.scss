@@ -1,0 +1,288 @@
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  border: 1px solid #eef0f5;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sortWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortLabel {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.sortButton {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 6px 14px;
+  font-size: 13px;
+  background: #f9fafb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.sortButton:hover {
+  background: #f3f4f6;
+}
+
+.sortChevron {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.searchWrapper {
+  position: relative;
+  width: 220px;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 32px 8px 14px;
+  font-size: 14px;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchInput:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.3);
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.searchSvg {
+  width: 16px;
+  height: 16px;
+  stroke: #9ca3af;
+  stroke-width: 2;
+  fill: none;
+}
+
+.table {
+  width: 100%;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 3fr 1.4fr;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #9ca3af;
+  padding: 8px 8px 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableBody {
+  margin-top: 4px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 3fr 1.4fr;
+  align-items: center;
+  padding: 14px 8px 14px 0;
+  column-gap: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.row:last-of-type {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: #f9fafb;
+}
+
+.accountCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarInner {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #38bdf8, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatarArrow {
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 10px solid #0f172a;
+}
+
+.accountText {
+  display: flex;
+  flex-direction: column;
+}
+
+.accountName {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.titleCell,
+.createdCell,
+.commentsCell,
+.progressCell,
+.categoryCell {
+  font-size: 13px;
+  color: #111827;
+}
+
+.titleCell {
+  font-weight: 500;
+}
+
+.createdCell,
+.commentsCell {
+  color: #4b5563;
+}
+
+.progressCell {
+  padding-right: 12px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+  display: flex;
+}
+
+.progressYes {
+  background: #22c55e;
+}
+
+.progressNo {
+  background: #ef4444;
+}
+
+.categoryCell {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.categoryBadge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.categoryProtocol {
+  background: #1d4ed8;
+}
+
+.categorySecurity {
+  background: #3b82f6;
+}
+
+.categoryOther {
+  background: #6b7280;
+}
+
+.emptyState {
+  padding: 20px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* basic responsiveness */
+@media (max-width: 900px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .headerControls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHeader {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: 1.8fr 1.2fr 1fr;
+    grid-template-rows: auto auto;
+    row-gap: 8px;
+  }
+
+  .titleCell {
+    grid-column: 1 / -1;
+  }
+
+  .createdCell,
+  .commentsCell,
+  .progressCell,
+  .categoryCell {
+    font-size: 12px;
+  }
+}
