@@ -2,9 +2,11 @@
 
 import ActiveProposalsTable from "@/components/ActiveProposalsTable";
 import DelegatesCountCard from "@/components/DelegatesCountCard";
+import Header from "@/components/Header";
 import ParticipationRateCard from "@/components/ParticipationRateCard";
 import RecentlyPassedCard from "@/components/RecentlyPassedCard";
 import RecentlyRejectedCard from "@/components/RecentlyRejected";
+import Sidebar from "@/components/Sidebar";
 import { useProposals } from "@/hooks/useProposals";
 
 export default function Page() {
@@ -19,6 +21,8 @@ export default function Page() {
       {data.map((proposal: any) => (
         <div key={proposal.snapshot}>{proposal.metadata.title}</div>
       ))}
+      <Header />
+      <Sidebar />
       <ActiveProposalsTable />
       <RecentlyPassedCard />
       <RecentlyRejectedCard />
