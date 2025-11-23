@@ -1,17 +1,21 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './ActiveProposalsTable.module.scss';
+import { useProposals } from '@/hooks/useProposals';
 
 export type ProposalCategory = 'Protocol' | 'Security' | 'Other';
 
 export interface Proposal {
-  id: number;
+  id: string;
   title: string;
-  createdAt: string; // ISO date string
+  created: number; // timestamp
+  end: number; // timestamp
   commentsCount: number;
-  yesPercent: number;
-  noPercent: number;
+  ayeValue: number; // in tokens
+  nayValue: number; // in tokens
+  abstainValue: number; // in tokens
+  totalVotes: number; // in tokens
   category: ProposalCategory;
   accountName: string;
 }
@@ -20,6 +24,7 @@ interface ActiveProposalsTableProps {
   proposals?: Proposal[];
 }
 
+/*
 const DEFAULT_PROPOSALS: Proposal[] = [
   {
     id: 10,
@@ -31,47 +36,8 @@ const DEFAULT_PROPOSALS: Proposal[] = [
     category: 'Protocol',
     accountName: 'Starknet',
   },
-  {
-    id: 9,
-    title: 'Proposal #9',
-    createdAt: '2025-02-28',
-    commentsCount: 121,
-    yesPercent: 82,
-    noPercent: 18,
-    category: 'Security',
-    accountName: 'Starknet',
-  },
-  {
-    id: 8,
-    title: 'Proposal #8',
-    createdAt: '2025-02-10',
-    commentsCount: 137,
-    yesPercent: 80,
-    noPercent: 20,
-    category: 'Protocol',
-    accountName: 'Starknet',
-  },
-  {
-    id: 7,
-    title: 'Proposal #7',
-    createdAt: '2024-07-11',
-    commentsCount: 319,
-    yesPercent: 76,
-    noPercent: 24,
-    category: 'Security',
-    accountName: 'Starknet',
-  },
-  {
-    id: 6,
-    title: 'Proposal #6',
-    createdAt: '2023-09-27',
-    commentsCount: 405,
-    yesPercent: 78,
-    noPercent: 22,
-    category: 'Protocol',
-    accountName: 'Starknet',
-  },
 ];
+*/
 
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', {
@@ -80,9 +46,13 @@ const formatDate = (iso: string) =>
     year: 'numeric',
   });
 
-const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
-  proposals = DEFAULT_PROPOSALS,
-}) => {
+const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = () => {
+  const { data, error, loading } = useProposals();
+  // TODO: handle error
+
+  const proposals = (data ?? []) as Proposal[];
+  console.log(proposals && proposals[0]);
+
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [search, setSearch] = useState('');
 
@@ -98,12 +68,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
       );
     });
 
-    items = items.sort((a, b) => {
-      const da = new Date(a.createdAt).getTime();
-      const db = new Date(b.createdAt).getTime();
-      return sortOrder === 'newest' ? db - da : da - db;
-    });
-
+    items = items.sort((a, b) => a.created - b.created)
     return items;
   }, [proposals, search, sortOrder]);
 
@@ -183,11 +148,11 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
                 <div className={styles.progressBar}>
                   <div
                     className={styles.progressYes}
-                    style={{ width: `${p.yesPercent}%` }}
+                    style={{ width: `${p.ayeValue / p.totalVotes * 100}%` }}
                   />
                   <div
                     className={styles.progressNo}
-                    style={{ width: `${p.noPercent}%` }}
+                    style={{ width: `${p.nayValue / p.totalVotes * 100}%` }}
                   />
                 </div>
               </div>
