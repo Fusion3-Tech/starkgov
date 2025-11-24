@@ -1,15 +1,79 @@
-// TODO: specify types.
+export type ProposalState = "executed" | "closed" | "pending" | "active";
 
-export const transformProposalData = (data: any) => {
+export interface ProposalMetadata {
+  title?: string;
+  body?: string;
+  discussion?: string;
+  id?: string;
+}
+
+export interface SnapshotAuthor {
+  id: string;
+}
+
+export interface SnapshotProposal {
+  snapshot?: string;
+  id?: string;
+  start?: number;
+  quorum?: number;
+  created?: number;
+  author: SnapshotAuthor;
+  proposal_id: string;
+  min_end?: number;
+  max_end: number;
+  scores_total?: bigint | number | string;
+  scores_1?: bigint | number | string;
+  scores_2?: bigint | number | string;
+  scores_3?: bigint | number | string;
+  completed?: boolean;
+  vetoed?: boolean;
+  executed?: boolean;
+  cancelled?: boolean;
+  metadata?: ProposalMetadata;
+}
+
+export interface ProposalsQueryData {
+  proposals: SnapshotProposal[];
+}
+
+export interface TransformedProposal
+  extends Omit<
+      SnapshotProposal,
+      | "author"
+      | "max_end"
+      | "proposal_id"
+      | "metadata"
+      | "scores_total"
+      | "scores_1"
+      | "scores_2"
+      | "scores_3"
+    >,
+    ProposalMetadata {
+  author: string;
+  end: number;
+  id: string;
+  ipfs?: string;
+  choices: string[];
+  scores_total: number;
+  scores: [string, string, string];
+  state: ProposalState;
+}
+
+export const transformProposalData = (
+  data?: ProposalsQueryData | null
+): TransformedProposal[] | ProposalsQueryData | null | undefined => {
   if (data && data.proposals && data.proposals.length) {
-    return data.proposals.map((proposal: any) => transformProposal(proposal));
-  } else {
-    return data;
+    return data.proposals.map((proposal) => transformProposal(proposal));
   }
+
+  return data;
 };
 
-export const transformProposal = (proposal: any) => {
+export const transformProposal = (
+  proposal: SnapshotProposal
+): TransformedProposal => {
   const timeNow = Date.now();
+
   return {
     ...proposal,
     ...proposal.metadata,
@@ -39,12 +103,15 @@ export const transformProposal = (proposal: any) => {
   };
 };
 
-function getProposalState(proposal: any, current: number) {
+function getProposalState(
+  proposal: Pick<SnapshotProposal, "executed" | "max_end" | "start">,
+  current: number
+): ProposalState {
   if (proposal.executed) return "executed";
-  if (proposal.max_end * 1000 <= current) {
+  if ((proposal.max_end || 0) * 1000 <= current) {
     return "closed";
   }
-  if (proposal.start * 1000 > current) return "pending";
+  if ((proposal.start || 0) * 1000 > current) return "pending";
 
   return "active";
 }

@@ -2,110 +2,72 @@
 
 import React, { useMemo, useState } from 'react';
 import styles from './ActiveProposalsTable.module.scss';
-
-export type ProposalCategory = 'Protocol' | 'Security' | 'Other';
-
-export interface Proposal {
-  id: number;
-  title: string;
-  createdAt: string; // ISO date string
-  commentsCount: number;
-  yesPercent: number;
-  noPercent: number;
-  category: ProposalCategory;
-  accountName: string;
-}
+import { useProposals } from '@/hooks/useProposals';
+import { TransformedProposal } from '@/hooks/helpers';
 
 interface ActiveProposalsTableProps {
-  proposals?: Proposal[];
+  proposals?: TransformedProposal[];
 }
 
-const DEFAULT_PROPOSALS: Proposal[] = [
-  {
-    id: 10,
-    title: 'Proposal #10',
-    createdAt: '2025-11-22',
-    commentsCount: 365,
-    yesPercent: 86,
-    noPercent: 14,
-    category: 'Protocol',
-    accountName: 'Starknet',
-  },
-  {
-    id: 9,
-    title: 'Proposal #9',
-    createdAt: '2025-02-28',
-    commentsCount: 121,
-    yesPercent: 82,
-    noPercent: 18,
-    category: 'Security',
-    accountName: 'Starknet',
-  },
-  {
-    id: 8,
-    title: 'Proposal #8',
-    createdAt: '2025-02-10',
-    commentsCount: 137,
-    yesPercent: 80,
-    noPercent: 20,
-    category: 'Protocol',
-    accountName: 'Starknet',
-  },
-  {
-    id: 7,
-    title: 'Proposal #7',
-    createdAt: '2024-07-11',
-    commentsCount: 319,
-    yesPercent: 76,
-    noPercent: 24,
-    category: 'Security',
-    accountName: 'Starknet',
-  },
-  {
-    id: 6,
-    title: 'Proposal #6',
-    createdAt: '2023-09-27',
-    commentsCount: 405,
-    yesPercent: 78,
-    noPercent: 22,
-    category: 'Protocol',
-    accountName: 'Starknet',
-  },
-];
+const formatDate = (timestamp?: number) =>
+  timestamp
+    ? new Date(timestamp * 1000).toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric',
+      })
+    : '—';
 
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-  });
+const formatAccount = (account?: string) => {
+  if (!account) return '—';
+  if (account.length <= 8) return account;
+  return `${account.slice(0, 4)}...${account.slice(-4)}`;
+};
 
 const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
-  proposals = DEFAULT_PROPOSALS,
+  proposals: proposalsFromProps,
 }) => {
+  const { data, error } = useProposals();
+
+  const proposals = useMemo<TransformedProposal[]>(() => {
+    if (proposalsFromProps) return proposalsFromProps;
+    if (Array.isArray(data)) return data;
+
+    return [];
+  }, [data, proposalsFromProps]);
+
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [search, setSearch] = useState('');
 
   const filteredProposals = useMemo(() => {
     const term = search.toLowerCase().trim();
 
-    let items = proposals.filter((p) => {
+    const items = proposals.filter((p) => {
       if (!term) return true;
       return (
-        p.title.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p.accountName.toLowerCase().includes(term)
+        p.title?.toLowerCase().includes(term) ||
+        p.author.toLowerCase().includes(term) ||
+        p.state.toLowerCase().includes(term)
       );
     });
 
-    items = items.sort((a, b) => {
-      const da = new Date(a.createdAt).getTime();
-      const db = new Date(b.createdAt).getTime();
-      return sortOrder === 'newest' ? db - da : da - db;
-    });
-
-    return items;
+    return items.sort((a, b) =>
+      sortOrder === 'newest'
+        ? (b.created || 0) - (a.created || 0)
+        : (a.created || 0) - (b.created || 0)
+    );
   }, [proposals, search, sortOrder]);
+
+  if (error) {
+    return (
+      <section className={styles.card}>
+        <header className={styles.header}>
+          <h2 className={styles.title}>Active Proposals</h2>
+        </header>
+        <div className={styles.emptyState}>Unable to load proposals.</div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.card}>
@@ -156,9 +118,9 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
           <span>Account</span>
           <span>Proposal Title</span>
           <span>Created</span>
-          <span>Comments</span>
+          <span>Votes</span>
           <span>Proposal Vote Progress</span>
-          <span>Category</span>
+          <span>Status</span>
         </div>
 
         <div className={styles.tableBody}>
@@ -171,38 +133,60 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
                   </div>
                 </div>
                 <div className={styles.accountText}>
-                  <span className={styles.accountName}>{p.accountName}</span>
+                  <span className={styles.accountName}>
+                    {formatAccount(p.author)}
+                  </span>
                 </div>
               </div>
 
-              <div className={styles.titleCell}>{p.title}</div>
-              <div className={styles.createdCell}>{formatDate(p.createdAt)}</div>
-              <div className={styles.commentsCell}>{p.commentsCount}</div>
+              <div className={styles.titleCell}>{p.title || p.id}</div>
+              <div className={styles.createdCell}>{formatDate(p.created)}</div>
+              <div className={styles.commentsCell}>
+                {p.scores_total?.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
+              </div>
 
               <div className={styles.progressCell}>
                 <div className={styles.progressBar}>
-                  <div
-                    className={styles.progressYes}
-                    style={{ width: `${p.yesPercent}%` }}
-                  />
-                  <div
-                    className={styles.progressNo}
-                    style={{ width: `${p.noPercent}%` }}
-                  />
+                  {(() => {
+                    const [forVotes, againstVotes, abstainVotes] = (
+                      p.scores || []
+                    ).map((score) => Number(score) || 0);
+                    const totalVotes =
+                      forVotes + againstVotes + abstainVotes || 1;
+
+                    return (
+                      <>
+                        <div
+                          className={styles.progressYes}
+                          style={{
+                            width: `${(forVotes / totalVotes) * 100}%`,
+                          }}
+                        />
+                        <div
+                          className={styles.progressNo}
+                          style={{
+                            width: `${(againstVotes / totalVotes) * 100}%`,
+                          }}
+                        />
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
               <div className={styles.categoryCell}>
                 <span
                   className={`${styles.categoryBadge} ${
-                    p.category === 'Protocol'
+                    p.state === 'executed'
                       ? styles.categoryProtocol
-                      : p.category === 'Security'
+                      : p.state === 'active'
                       ? styles.categorySecurity
                       : styles.categoryOther
                   }`}
                 >
-                  {p.category}
+                  {p.state}
                 </span>
               </div>
             </div>
