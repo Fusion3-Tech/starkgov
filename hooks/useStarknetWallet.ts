@@ -24,53 +24,77 @@ export interface StarknetWalletConnection {
   chainId?: string;
 }
 
+const getWindowWallets = (): StarknetWindowObject[] => {
+  if (typeof window === 'undefined') return [];
+  const candidate = window.starknet;
+  if (!candidate) return [];
+  return (Array.isArray(candidate) ? candidate : [candidate]).filter(
+    (w): w is StarknetWindowObject => !!w
+  );
+};
+
 export function useStarknetWallet() {
   const [wallet, setWallet] = useState<StarknetWindowObject | null>(null);
   const [accounts, setAccounts] = useState<string[]>([]);
   const [chainId, setChainId] = useState<string | undefined>();
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [availableWallets, setAvailableWallets] = useState<StarknetWindowObject[]>(() =>
+    getWindowWallets()
+  );
 
-  const connectWallet = useCallback(async (): Promise<StarknetWalletConnection | null> => {
-    if (typeof window === 'undefined') {
-      setError('Wallet connection is only available in the browser.');
-      return null;
-    }
+  const connectWallet = useCallback(
+    async (preferredId?: string): Promise<StarknetWalletConnection | null> => {
+      const detectedWallets = getWindowWallets();
+      setAvailableWallets(detectedWallets);
 
-    const candidate = window.starknet;
-    const target = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (typeof window === 'undefined') {
+        setError('Wallet connection is only available in the browser.');
+        return null;
+      }
 
-    if (!target) {
-      setError('No Starknet wallet detected.');
-      return null;
-    }
+      const target =
+        (preferredId &&
+          detectedWallets.find(
+            (w) =>
+              w.id?.toLowerCase() === preferredId.toLowerCase() ||
+              w.name?.toLowerCase() === preferredId.toLowerCase()
+          )) ||
+        detectedWallets[0];
 
-    setConnecting(true);
-    setError(null);
+      if (!target) {
+        setError('No Starknet wallet detected.');
+        return null;
+      }
 
-    try {
-      const accountsResultRaw = await target.request<string[]>({
-        type: 'wallet_requestAccounts',
-      });
-      const accountsResult = Array.isArray(accountsResultRaw)
-        ? accountsResultRaw.filter((a): a is string => typeof a === 'string')
-        : [];
-      const currentChain = await target
-        .request<string>({ type: 'wallet_requestChainId' })
-        .catch(() => undefined);
+      setConnecting(true);
+      setError(null);
 
-      setWallet(target);
-      setAccounts(accountsResult);
-      setChainId(currentChain);
+      try {
+        const accountsResultRaw = await target.request<string[]>({
+          type: 'wallet_requestAccounts',
+        });
+        const accountsResult = Array.isArray(accountsResultRaw)
+          ? accountsResultRaw.filter((a): a is string => typeof a === 'string')
+          : [];
+        const currentChain = await target
+          .request<string>({ type: 'wallet_requestChainId' })
+          .catch(() => undefined);
 
-      return { wallet: target, accounts: accountsResult, chainId: currentChain };
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to connect Starknet wallet.');
-      return null;
-    } finally {
-      setConnecting(false);
-    }
-  }, []);
+        setWallet(target);
+        setAccounts(accountsResult);
+        setChainId(currentChain);
+
+        return { wallet: target, accounts: accountsResult, chainId: currentChain };
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to connect Starknet wallet.');
+        return null;
+      } finally {
+        setConnecting(false);
+      }
+    },
+    []
+  );
 
   const disconnectWallet = useCallback(() => {
     setWallet(null);
@@ -85,6 +109,7 @@ export function useStarknetWallet() {
     chainId,
     connecting,
     error,
+    availableWallets,
     connectWallet,
     disconnectWallet,
   };

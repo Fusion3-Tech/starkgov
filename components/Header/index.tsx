@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import styles from './Header.module.scss';
 import { useStarknetWallet } from '@/hooks/useStarknetWallet';
+import WalletModal from '../WalletModal';
 
 export default function Header() {
-  const { wallet, accounts, connecting, connectWallet } = useStarknetWallet();
+  const { wallet, accounts, connecting, connectWallet, availableWallets } = useStarknetWallet();
+  const [showWalletModal, setShowWalletModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
 
   return (
@@ -55,13 +58,23 @@ export default function Header() {
           <button
             className={styles.connectButton}
             type="button"
-            onClick={() => connectWallet()}
+            onClick={() => setShowWalletModal(true)}
             disabled={connecting}
           >
             {connecting ? 'Connecting...' : 'Connect Wallet'}
           </button>
         )}
       </div>
+
+      <WalletModal
+        open={showWalletModal}
+        installedWallets={availableWallets}
+        onClose={() => setShowWalletModal(false)}
+        onConnect={(walletId) => {
+          connectWallet(walletId);
+          setShowWalletModal(false);
+        }}
+      />
     </header>
   );
 }
