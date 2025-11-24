@@ -1,8 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import styles from './Header.module.scss';
+import { useStarknetWallet } from '@/hooks/useStarknetWallet';
+import WalletModal from '../WalletModal';
 
 export default function Header() {
+  const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
+    useStarknetWallet();
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const isConnected = !!wallet && accounts.length > 0;
+
   return (
     <header className={styles.header}>
       {/* Search */}
@@ -42,11 +50,42 @@ export default function Header() {
           </svg>
         </button>
 
-        {/* Avatar */}
-        <div className={styles.avatar}>
-          <img src="/avatar.png" alt="User" />
-        </div>
+        {/* Avatar / Connect */}
+        {isConnected ? (
+          <button
+            className={styles.avatar}
+            title={accounts[0]}
+            type="button"
+            onClick={() => setShowWalletModal(true)}
+          >
+            <img src="/avatar.png" alt="Wallet connected" />
+          </button>
+        ) : (
+          <button
+            className={styles.connectButton}
+            type="button"
+            onClick={() => setShowWalletModal(true)}
+            disabled={connecting}
+          >
+            {connecting ? 'Connecting...' : 'Connect Wallet'}
+          </button>
+        )}
       </div>
+
+      <WalletModal
+        open={showWalletModal}
+        installedWallets={availableWallets}
+        onClose={() => setShowWalletModal(false)}
+        onConnect={(walletId) => {
+          connectWallet(walletId);
+          setShowWalletModal(false);
+        }}
+        connectedWalletId={wallet?.id}
+        onDisconnect={() => {
+          disconnectWallet();
+          setShowWalletModal(false);
+        }}
+      />
     </header>
   );
 }
