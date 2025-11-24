@@ -18,6 +18,12 @@ const formatDate = (timestamp?: number) =>
       })
     : '—';
 
+const formatAccount = (account?: string) => {
+  if (!account) return '—';
+  if (account.length <= 8) return account;
+  return `${account.slice(0, 4)}...${account.slice(-4)}`;
+};
+
 const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   proposals: proposalsFromProps,
 }) => {
@@ -127,7 +133,9 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
                   </div>
                 </div>
                 <div className={styles.accountText}>
-                  <span className={styles.accountName}>{p.author}</span>
+                  <span className={styles.accountName}>
+                    {formatAccount(p.author)}
+                  </span>
                 </div>
               </div>
 
