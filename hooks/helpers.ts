@@ -22,9 +22,9 @@ export interface SnapshotProposal {
   min_end?: number;
   max_end: number;
   scores_total?: bigint | number | string;
-  scores_1?: bigint | number | string;
-  scores_2?: bigint | number | string;
-  scores_3?: bigint | number | string;
+  scores_1?: bigint | number | string; // aye
+  scores_2?: bigint | number | string; // nay
+  scores_3?: bigint | number | string; // abstain
   completed?: boolean;
   vetoed?: boolean;
   executed?: boolean;

@@ -1,8 +1,12 @@
 'use client';
 
 import styles from './Header.module.scss';
+import { useStarknetWallet } from '@/hooks/useStarknetWallet';
 
 export default function Header() {
+  const { wallet, accounts, connecting, connectWallet } = useStarknetWallet();
+  const isConnected = !!wallet && accounts.length > 0;
+
   return (
     <header className={styles.header}>
       {/* Search */}
@@ -42,10 +46,21 @@ export default function Header() {
           </svg>
         </button>
 
-        {/* Avatar */}
-        <div className={styles.avatar}>
-          <img src="/avatar.png" alt="User" />
-        </div>
+        {/* Avatar / Connect */}
+        {isConnected ? (
+          <div className={styles.avatar} title={accounts[0]}>
+            <img src="/avatar.png" alt="Wallet connected" />
+          </div>
+        ) : (
+          <button
+            className={styles.connectButton}
+            type="button"
+            onClick={() => connectWallet()}
+            disabled={connecting}
+          >
+            {connecting ? 'Connecting...' : 'Connect Wallet'}
+          </button>
+        )}
       </div>
     </header>
   );
