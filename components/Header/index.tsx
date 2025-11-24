@@ -6,7 +6,8 @@ import { useStarknetWallet } from '@/hooks/useStarknetWallet';
 import WalletModal from '../WalletModal';
 
 export default function Header() {
-  const { wallet, accounts, connecting, connectWallet, availableWallets } = useStarknetWallet();
+  const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
+    useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
 
@@ -51,9 +52,14 @@ export default function Header() {
 
         {/* Avatar / Connect */}
         {isConnected ? (
-          <div className={styles.avatar} title={accounts[0]}>
+          <button
+            className={styles.avatar}
+            title={accounts[0]}
+            type="button"
+            onClick={() => setShowWalletModal(true)}
+          >
             <img src="/avatar.png" alt="Wallet connected" />
-          </div>
+          </button>
         ) : (
           <button
             className={styles.connectButton}
@@ -72,6 +78,11 @@ export default function Header() {
         onClose={() => setShowWalletModal(false)}
         onConnect={(walletId) => {
           connectWallet(walletId);
+          setShowWalletModal(false);
+        }}
+        connectedWalletId={wallet?.id}
+        onDisconnect={() => {
+          disconnectWallet();
           setShowWalletModal(false);
         }}
       />

@@ -16,6 +16,8 @@ interface WalletModalProps {
   installedWallets: StarknetWindowObject[];
   onClose: () => void;
   onConnect: (walletId: string) => void;
+  connectedWalletId?: string | null;
+  onDisconnect?: () => void;
 }
 
 const WALLET_OPTIONS: WalletOption[] = [
@@ -44,6 +46,8 @@ const WalletModal: React.FC<WalletModalProps> = ({
   installedWallets,
   onClose,
   onConnect,
+  connectedWalletId,
+  onDisconnect,
 }) => {
   if (!open) return null;
 
@@ -63,6 +67,18 @@ const WalletModal: React.FC<WalletModalProps> = ({
             ×
           </button>
         </header>
+
+        {connectedWalletId && (
+          <div className={styles.current}>
+            <span className={styles.currentLabel}>Connected:</span>
+            <span className={styles.currentValue}>{connectedWalletId}</span>
+            {onDisconnect && (
+              <button className={styles.disconnectButton} onClick={onDisconnect} type="button">
+                Disconnect
+              </button>
+            )}
+          </div>
+        )}
 
         <div className={styles.walletList}>
           {WALLET_OPTIONS.map((wallet) => {
