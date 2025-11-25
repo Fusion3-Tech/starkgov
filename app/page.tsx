@@ -11,8 +11,18 @@ import DelegatesCountCard from '@/components/DelegatesCountCard';
 import RecentlyPassedCard from '@/components/RecentlyPassedCard';
 import RecentlyRejectedCard from '@/components/RecentlyRejectedCard';
 import ActiveProposalsTable from '@/components/ActiveProposalsTable';
+import { useDelegates } from '@/hooks/useDelegates';
 
 export default function DashboardPage() {
+  const { delegates, loading, error, refetch } = useDelegates({
+    limit: 12,
+    sortBy: "delegatedVotingPower",
+    searchQuery: "",
+    filters: []
+  });
+  console.log(error);
+  console.log(delegates);
+
   return (
     <div className={styles.shell}>
       <Sidebar />
