@@ -14,16 +14,16 @@ interface NavItem {
 
 const mainItems: NavItem[] = [
   { label: 'Dashboard', key: 'dashboard', active: true },
+  { label: 'Proposals', key: 'proposals' },
+  { label: 'Delegates', key: 'delegates' },
+  { label: 'Submit Proposal', key: 'submit-proposal' },
+  { label: 'Voting Power', key: 'voting-power' },
   { label: 'Analytics', key: 'analytics' },
-  { label: 'Sales', key: 'sales' },
-  { label: 'Product', key: 'product' },
-  { label: 'Customer', key: 'customer' },
-  { label: 'Payout', key: 'payout' },
 ];
 
 const settingsItems: NavItem[] = [
-  { label: 'Profile', key: 'profile' },
-  { label: 'Inbox', key: 'inbox', hasBadge: true, badgeCount: 8 },
+  { label: 'Notifications', key: 'notifications', hasBadge: true, badgeCount: 8 },
+  { label: 'Docs', key: 'docs' },
   { label: 'Settings', key: 'settings' },
 ];
 
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
 
       {/* Settings section */}
       <div className={styles.settingsSection}>
-        <div className={styles.settingsTitle}>Settings</div>
+        <div className={styles.settingsTitle}>Other</div>
         <nav className={styles.nav}>
           {settingsItems.map((item) => (
             <button
@@ -77,25 +77,6 @@ const Sidebar: React.FC = () => {
             </button>
           ))}
         </nav>
-      </div>
-
-      {/* Bottom controls */}
-      <div className={styles.bottomSection}>
-        <div className={styles.themeToggle}>
-          <span className={styles.themeIcon}>☀️</span>
-          <label className={styles.toggle}>
-            <input type="checkbox" />
-            <span className={styles.toggleTrack}>
-              <span className={styles.toggleThumb} />
-            </span>
-          </label>
-          <span className={styles.themeIcon}>🌙</span>
-        </div>
-
-        <div className={styles.footer}>
-          <span className={styles.copyrightIcon}>©</span>
-          <span className={styles.footerText}>Copyright StarkGov 2025</span>
-        </div>
       </div>
     </aside>
   );
@@ -123,49 +104,44 @@ function renderIcon(key: string, filled: boolean) {
           <rect x="15" y="5" width="3" height="13" rx="1" />
         </svg>
       );
-    case 'sales':
+    case 'proposals':
       return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <polyline points="2 14 7 9 11 12 18 4" fill="none" strokeWidth="2" />
-          <polyline points="13 4 18 4 18 9" fill="none" strokeWidth="2" />
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <rect x="4" y="3" width="10" height="14" rx="2" />
+          <path d="M14 5h2v10c0 1.1-.9 2-2 2H8v-2" />
+          <path d="M6.5 7.5h5" />
+          <path d="M6.5 10h3" />
         </svg>
       );
-    case 'product':
+    case 'delegates':
       return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <rect x="3" y="4" width="14" height="12" rx="2" />
-          <rect x="3" y="4" width="14" height="3" />
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <path d="M10 3 2.5 6.5 10 10l7.5-3.5L10 3Z" />
+          <path d="M5 9v3.5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V9" />
+          <path d="M5 6.5 10 9l5-2.5" />
         </svg>
       );
-    case 'customer':
+    case 'submit-proposal':
       return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <circle cx="7" cy="7" r="3" />
-          <path d="M2 16c1.2-2 2.9-3 5-3s3.8 1 5 3" />
-          <circle cx="15" cy="8" r="2" />
-          <path d="M12.5 15c.7-1.2 1.6-2 2.5-2s1.8.8 2.5 2" />
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <rect x="4" y="3" width="10" height="14" rx="2" />
+          <path d="M9 7h4" />
+          <path d="M9 10h4" />
+          <path d="M9 13h2.5" />
+          <path d="M4 9h-2" />
+          <path d="M4 6h-2" />
+          <path d="M4 12h-2" />
+          <path d="M9 4 7 4c-1.1 0-2 .9-2 2v8" />
         </svg>
       );
-    case 'payout':
+    case 'voting-power':
       return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <rect x="3" y="4" width="14" height="12" rx="2" />
-          <circle cx="9" cy="10" r="2.2" />
-          <path d="M11.5 10h3.5" />
-        </svg>
-      );
-    case 'profile':
-      return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <circle cx="10" cy="7" r="3" />
-          <path d="M4 16c1.5-2 3.5-3 6-3s4.5 1 6 3" />
-        </svg>
-      );
-    case 'inbox':
-      return (
-        <svg viewBox="0 0 20 20" className={styles.icon}>
-          <rect x="3" y="5" width="14" height="10" rx="2" />
-          <path d="M3 11h4l2 3h2l2-3h4" />
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <circle cx="5.5" cy="7" r="2.3" />
+          <circle cx="13" cy="6" r="2.3" />
+          <circle cx="10.5" cy="13" r="2.3" />
+          <path d="M7 8.7 9 11.2" />
+          <path d="M12 7.8l-1 3" />
         </svg>
       );
     case 'settings':
@@ -173,6 +149,22 @@ function renderIcon(key: string, filled: boolean) {
         <svg viewBox="0 0 20 20" className={styles.icon}>
           <circle cx="10" cy="10" r="3" />
           <path d="M4 10h-2m16 0h-2M10 4V2m0 16v-2M5.5 5.5 4 4m12 12-1.5-1.5M5.5 14.5 4 16m12-12-1.5 1.5" />
+        </svg>
+      );
+    case 'notifications':
+      return (
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <path d="M10 17a2 2 0 0 0 2-2H8a2 2 0 0 0 2 2Z" />
+          <path d="M15 7a5 5 0 1 0-10 0c0 4-1.5 5-1.5 5H16.5S15 11 15 7Z" />
+        </svg>
+      );
+    case 'docs':
+      return (
+        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
+          <path d="M5 4h6.5a3.5 3.5 0 0 1 3.5 3.5V16" />
+          <path d="M5 4v12" />
+          <path d="M5 16h10" />
+          <path d="M5 7h7.5" />
         </svg>
       );
     default:
