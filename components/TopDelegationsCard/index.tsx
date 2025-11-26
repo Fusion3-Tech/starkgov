@@ -3,6 +3,7 @@
 import React from 'react';
 import styles from './TopDelegationsCard.module.scss';
 import { useDelegates } from '@/hooks/useDelegates';
+import type { SyntheticEvent } from 'react';
 
 export interface DelegateItem {
   id: string | number;
@@ -19,6 +20,16 @@ interface TopDelegationsCardProps {
 const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
   delegates,
 }) => {
+  const DEFAULT_AVATAR =
+    'data:image/svg+xml;utf8,' +
+    encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <circle cx="40" cy="40" r="40" fill="#e5e7eb"/>
+        <circle cx="40" cy="32" r="14" fill="#d1d5db"/>
+        <path d="M14 66c3.5-10.5 13.4-18 26-18s22.5 7.5 26 18" fill="#cbd5e1"/>
+      </svg>`
+    );
+
   const {
     delegates: fetchedDelegates,
     loading,
@@ -43,24 +54,27 @@ const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
       const address =
         author?.publicIdentifier || author?.address || d.address || '';
 
-      const displayName =
-        author?.name ||
-        author?.username ||
-        extra?.name ||
-        extra?.username ||
-        extra?.displayName ||
-        shortenAddress(address);
+      const getSocialAvatar = () => {
+        const twitterHandle = author?.twitter || extra?.twitter;
+        if (twitterHandle) {
+          return `https://unavatar.io/twitter/${twitterHandle}`;
+        }
+        return undefined;
+      };
 
-      const votesValueRaw =
-        typeof votingInfo?.votingPower === 'number'
-          ? votingInfo.votingPower
-          : typeof d.votingPower === 'number'
-          ? d.votingPower
-          : Number(
-              (d as Record<string, any>)?.votingPower ??
-                votingInfo?.votingPower ??
-                0
-            );
+      const toNumber = (value: unknown) => {
+        if (typeof value === 'number' && Number.isFinite(value)) return value;
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+      };
+
+      const displayName = author?.username || shortenAddress(address);
+
+      const votesValueRaw = toNumber(
+        votingInfo?.votingPower ?? d.votingPower ?? 0
+      );
+
+      console.log(d);
 
       return {
         id: extra?.id || author?.id || address || idx,
@@ -73,7 +87,9 @@ const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
           extra?.profilePictureUrl ||
           extra?.imageUrl ||
           author?.profileImage ||
-          author?.ensAvatar,
+          author?.ensAvatar ||
+          getSocialAvatar() ||
+          DEFAULT_AVATAR,
       };
     });
 
@@ -94,10 +110,13 @@ const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
           <div key={d.id} className={styles.row}>
             <div className={styles.left}>
               <div className={styles.avatar}>
-                {/* Replace src with your real avatar if needed */}
                 <img
-                  src={d.avatarUrl || '/delegate-avatar.png'}
+                  src={d.avatarUrl || DEFAULT_AVATAR}
                   alt={d.name}
+                  onError={(e: SyntheticEvent<HTMLImageElement>) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = DEFAULT_AVATAR;
+                  }}
                 />
               </div>
 
