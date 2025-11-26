@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
 export interface DelegateFilters {
   filters?: any[];         // Eg: ["active"], depends on their schema
@@ -36,6 +36,16 @@ export function useDelegates({
   offset = 0,
 }: DelegateFilters = {}): UseDelegatesResult {
   
+  const filtersKey = useMemo(
+    () => JSON.stringify(filters ?? []),
+    [filters]
+  );
+
+  const normalizedFilters = useMemo(
+    () => (filtersKey ? JSON.parse(filtersKey) : []),
+    [filtersKey]
+  );
+
   const [delegates, setDelegates] = useState<Delegate[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +58,7 @@ export function useDelegates({
       // Prepare input for the tRPC call
       const input = {
         json: {
-          filters,
+          filters: normalizedFilters,
           searchQuery,
           limit,
           offset,
@@ -62,8 +72,6 @@ export function useDelegates({
 
       const res = await fetch(url, {
         method: "GET",
-        // If their backend restricts CORS, turn on a proxy and remove this:
-        // credentials: "include"
       });
 
       if (!res.ok) {
@@ -75,17 +83,15 @@ export function useDelegates({
       // tRPC batch always returns as array with index 0 for input 0
       const result = json?.result?.data ?? json[0]?.result?.data;
 
-      // Inspect result shape in console
-      // console.log("Delegates result:", result);
 
-      setDelegates(result || []);
+      setDelegates(result.json || []);
     } catch (err: any) {
       console.error("Delegate fetch error:", err);
       setError(err.message || "Unknown error");
     } finally {
       setLoading(false);
     }
-  }, [filters, searchQuery, sortBy, limit, offset]);
+  }, [filtersKey, normalizedFilters, searchQuery, sortBy, limit, offset]);
 
   useEffect(() => {
     fetchDelegates();

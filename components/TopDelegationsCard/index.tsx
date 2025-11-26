@@ -2,9 +2,10 @@
 
 import React from 'react';
 import styles from './TopDelegationsCard.module.scss';
+import { useDelegates } from '@/hooks/useDelegates';
 
 export interface DelegateItem {
-  id: number;
+  id: string | number;
   name: string;
   votes: string; // formatted string, e.g. "7M"
   rank: number;
@@ -15,26 +16,81 @@ interface TopDelegationsCardProps {
   delegates?: DelegateItem[];
 }
 
-const DEFAULT_DELEGATES: DelegateItem[] = [
-  { id: 1, name: '0xlenny',       votes: '7M',  rank: 1 },
-  { id: 2, name: 'Paco Villetard', votes: '5.8M', rank: 2 },
-  { id: 3, name: 'chqrles',       votes: '4.9M', rank: 3 },
-  { id: 4, name: '0xAA',          votes: '4.8M', rank: 4 },
-  { id: 5, name: 'L2BEAT',        votes: '4.5M', rank: 5 },
-  { id: 6, name: 'dan-kakrot',    votes: '4.5M', rank: 6 },
-];
-
 const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
-  delegates = DEFAULT_DELEGATES,
+  delegates,
 }) => {
+  const {
+    delegates: fetchedDelegates,
+    loading,
+    error,
+  } = useDelegates({ limit: 10, sortBy: 'delegatedVotingPower' });
+
+  const formatVotes = (votes: number) => {
+    if (votes >= 1_000_000) return `${(votes / 1_000_000).toFixed(1)}M`;
+    if (votes >= 1_000) return `${(votes / 1_000).toFixed(1)}K`;
+    return `${votes}`;
+  };
+
+  const shortenAddress = (addr: string) =>
+    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : 'Unknown';
+
+  const mappedDelegates: DelegateItem[] | undefined = (fetchedDelegates ?? [])
+    .slice(0, 10)
+    .map((d, idx) => {
+      const extra = d as Record<string, any>;
+      const author = (extra?.author ?? {}) as Record<string, any>;
+      const votingInfo = (extra?.votingInfo ?? {}) as Record<string, any>;
+      const address =
+        author?.publicIdentifier || author?.address || d.address || '';
+
+      const displayName =
+        author?.name ||
+        author?.username ||
+        extra?.name ||
+        extra?.username ||
+        extra?.displayName ||
+        shortenAddress(address);
+
+      const votesValueRaw =
+        typeof votingInfo?.votingPower === 'number'
+          ? votingInfo.votingPower
+          : typeof d.votingPower === 'number'
+          ? d.votingPower
+          : Number(
+              (d as Record<string, any>)?.votingPower ??
+                votingInfo?.votingPower ??
+                0
+            );
+
+      return {
+        id: extra?.id || author?.id || address || idx,
+        name: displayName,
+        votes: formatVotes(votesValueRaw),
+        rank: idx + 1,
+        avatarUrl:
+          extra?.avatarUrl ||
+          extra?.avatar ||
+          extra?.profilePictureUrl ||
+          extra?.imageUrl ||
+          author?.profileImage ||
+          author?.ensAvatar,
+      };
+    });
+
+  const displayDelegates = mappedDelegates ?? delegates ?? [];
+
   return (
     <section className={styles.card}>
       <header className={styles.header}>
         <h3 className={styles.title}>Top 10 delegations</h3>
+        {error && <div className={styles.error}>Failed to load latest data</div>}
       </header>
 
       <div className={styles.list}>
-        {delegates.map((d) => (
+        {loading && !mappedDelegates?.length ? (
+          <div className={styles.subtext}>Loading...</div>
+        ) : null}
+        {displayDelegates.map((d) => (
           <div key={d.id} className={styles.row}>
             <div className={styles.left}>
               <div className={styles.avatar}>
