@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from './TopDelegationsCard.module.scss';
+import styles from './TopDelegatesCard.module.scss';
 import { useDelegates } from '@/hooks/useDelegates';
 import type { SyntheticEvent } from 'react';
 
@@ -13,11 +13,11 @@ export interface DelegateItem {
   avatarUrl?: string;
 }
 
-interface TopDelegationsCardProps {
+interface TopDelegatesCardProps {
   delegates?: DelegateItem[];
 }
 
-const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
+const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
   delegates,
 }) => {
   const DEFAULT_AVATAR =
@@ -73,8 +73,6 @@ const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
       const votesValueRaw = toNumber(
         votingInfo?.votingPower ?? d.votingPower ?? 0
       );
-
-      console.log(d);
 
       return {
         id: extra?.id || author?.id || address || idx,
@@ -142,4 +140,4 @@ const TopDelegationsCard: React.FC<TopDelegationsCardProps> = ({
   );
 };
 
-export default TopDelegationsCard;
+export default TopDelegatesCard;

@@ -5,7 +5,7 @@ import styles from './Dashboard.module.scss';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import TotalVstrkChart from '@/components/TotalVstrkChart';
-import TopDelegationsCard from '@/components/TopDelegationsCard';
+import TopDelegatesCard from '@/components/TopDelegatesCard';
 import ParticipationRateCard from '@/components/ParticipationRateCard';
 import DelegatesCountCard from '@/components/DelegatesCountCard';
 import RecentlyPassedCard from '@/components/RecentlyPassedCard';
@@ -27,7 +27,7 @@ export default function DashboardPage() {
           </div>
 
           <div className={styles.delegationsArea}>
-            <TopDelegationsCard />
+            <TopDelegatesCard />
           </div>
 
           <div className={styles.statsArea}>
