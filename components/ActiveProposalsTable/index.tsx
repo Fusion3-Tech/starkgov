@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import styles from './ActiveProposalsTable.module.scss';
 import { useProposals } from '@/hooks/useProposals';
 import { TransformedProposal } from '@/hooks/helpers';
+import blockies from 'ethereum-blockies';
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
@@ -28,6 +29,21 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   proposals: proposalsFromProps,
 }) => {
   const { data, error } = useProposals();
+
+  const getBlockieDataUrl = (seed?: string) => {
+    if (!seed) return 'starkgov';
+    try {
+      const icon = blockies.create({
+        seed: seed.toLowerCase(),
+        size: 8,
+        scale: 8,
+      });
+      return icon?.toDataURL?.() ?? '';
+    } catch (err) {
+      console.error('Blockies generation failed', err);
+      return '';
+    }
+  };
 
   const proposals = useMemo<TransformedProposal[]>(() => {
     if (proposalsFromProps) return proposalsFromProps;
@@ -128,9 +144,17 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
             <div key={p.id} className={styles.row}>
               <div className={styles.accountCell}>
                 <div className={styles.avatar}>
-                  <div className={styles.avatarInner}>
-                    <span className={styles.avatarArrow} />
-                  </div>
+                  {(() => {
+                    const blockie = getBlockieDataUrl(p.author);
+                    if (blockie) {
+                      return <img src={blockie} alt={p.author} />;
+                    }
+                    return (
+                      <span className={styles.avatarFallback}>
+                        {formatAccount(p.author)}
+                      </span>
+                    );
+                  })()}
                 </div>
                 <div className={styles.accountText}>
                   <span className={styles.accountName}>
