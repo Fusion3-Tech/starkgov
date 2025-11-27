@@ -34,7 +34,7 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
     delegates: fetchedDelegates,
     loading,
     error,
-  } = useDelegates({ limit: 10, sortBy: 'delegatedVotingPower' });
+  } = useDelegates({ limit: 10, sortBy: 'votingPower' });
 
   const formatVotes = (votes: number) => {
     if (votes >= 1_000_000) return `${(votes / 1_000_000).toFixed(1)}M`;
@@ -96,7 +96,7 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
   return (
     <section className={styles.card}>
       <header className={styles.header}>
-        <h3 className={styles.title}>Top 10 delegations</h3>
+        <h3 className={styles.title}>Top 10 delegates</h3>
         {error && <div className={styles.error}>Failed to load latest data</div>}
       </header>
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './RecentProposalsCard.module.scss';
 import type { TransformedProposal } from '@/hooks/helpers';
-import blockies from 'ethereum-blockies';
+import { getBlockieDataUrl } from '@/lib/blockies';
 
 export type ProposalStatus = 'passed' | 'rejected';
 
@@ -25,21 +25,6 @@ const RecentProposalsCard: React.FC<RecentProposalsCardProps> = ({
   status,
   proposals = [],
 }) => {
-  const getBlockieDataUrl = (seed?: string) => {
-    if (!seed) return '';
-    try {
-      const icon = blockies.create({
-        seed: seed.toLowerCase(),
-        size: 8,
-        scale: 8,
-      });
-      return icon?.toDataURL?.() ?? '';
-    } catch (err) {
-      console.error('Blockies generation failed', err);
-      return '';
-    }
-  };
-
   const badgeText = status === 'passed' ? 'Passed' : 'Rejected';
   const emptyText =
     status === 'passed'

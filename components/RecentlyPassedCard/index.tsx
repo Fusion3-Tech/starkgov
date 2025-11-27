@@ -8,8 +8,6 @@ import type { TransformedProposal } from '@/hooks/helpers';
 const RecentlyPassedCard: React.FC = () => {
   const { data } = useProposals();
 
-  console.log(data);
-
   const proposals = Array.isArray(data)
     ? (data as TransformedProposal[])
         .filter((p) => p.state === 'closed' && Number(p.scores[0]) > Number(p.scores[1]))
