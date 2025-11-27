@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AreaChart,
   Area,
@@ -11,55 +11,91 @@ import {
   ReferenceLine,
 } from 'recharts';
 import styles from './TotalVstrkChart.module.scss';
+import { useProposals } from '@/hooks/useProposals';
+import type { TransformedProposal } from '@/hooks/helpers';
 
 type DataPoint = {
-  x: number;      // 1..7
-  value: number;  // in millions
-  value2: number; // background/light series
-  month: string;
+  x: number; // sequential index
+  value: number; // in millions
+  dateLabel: string;
 };
-
-const data: DataPoint[] = [
-  { x: 1, value: 155, value2: 150, month: 'Jan' },
-  { x: 2, value: 170, value2: 165, month: 'Feb' },
-  { x: 3, value: 180, value2: 175, month: 'Mar' },
-  { x: 4, value: 220, value2: 200, month: 'Apr' },
-  { x: 5, value: 250, value2: 210, month: 'May' },
-  { x: 6, value: 190, value2: 180, month: 'Jun' },
-  { x: 7, value: 200, value2: 190, month: 'Jul' },
-];
 
 const CustomTooltip: React.FC<{
   active?: boolean;
   payload?: any[];
   label?: number;
-}> = ({ active, payload, label }) => {
+}> = ({ active, payload }) => {
   if (!active || !payload || payload.length === 0) return null;
 
-  const point = payload[0].payload as DataPoint;
+  const point = payload[0].payload as DataPoint | undefined;
+  if (!point) return null;
+
   return (
     <div className={styles.tooltip}>
-      <div className={styles.tooltipValue}>{point.value}M</div>
-      <div className={styles.tooltipSub}>{point.month}</div>
+      <div className={styles.tooltipValue}>{point.value.toFixed(2)}M</div>
+      <div className={styles.tooltipSub}>{point.dateLabel}</div>
     </div>
   );
 };
 
 const TotalVstrkChart: React.FC = () => {
-  // index of the “selected” point (3 => x:4 in example)
-  const selectedX = 4;
+  const { data: proposals, loading } = useProposals();
+
+  const chartData: DataPoint[] = useMemo(() => {
+    const source: TransformedProposal[] = Array.isArray(proposals)
+      ? proposals
+      : [];
+
+    return source
+      .filter(
+        (p) =>
+          typeof p.created === 'number' &&
+          typeof p.scores_total === 'number' &&
+          p.scores_total > 0
+      )
+      .sort((a, b) => (a.created || 0) - (b.created || 0))
+      .map((p, idx) => ({
+        x: idx + 1,
+        value: (p.scores_total || 0) / 1_000_000,
+        dateLabel: new Date((p.created || 0) * 1000).toLocaleDateString(
+          'en-US',
+          {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+          }
+        ),
+      }));
+  }, [proposals]);
+
+  const yDomain = useMemo(() => {
+    if (!chartData.length) return [0, 1];
+    const values = chartData.map((d) => d.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const padding = (max - min || max || 1) * 0.1;
+    return [Math.max(0, min - padding), max + padding];
+  }, [chartData]);
+
+  const selectedX = chartData.length;
 
   return (
     <section className={styles.card}>
       <header className={styles.header}>
-        <span className={styles.title}>Total vSTRK</span>
+        <span className={styles.title}>vSTRK Used in Voting</span>
         <span className={styles.infoIcon}>i</span>
       </header>
 
+      {!chartData.length && !loading ? (
+        <div className={styles.empty}>No proposal voting data yet.</div>
+      ) : null}
+
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, left: 0, right: 0, bottom: 0 }}>
-            {/* gradients */}
+          <AreaChart
+            data={chartData}
+            margin={{ top: 10, left: 0, right: 0, bottom: 0 }}
+          >
             <defs>
               <linearGradient id="vstrkMain" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#4338CA" stopOpacity={0.6} />
@@ -76,21 +112,21 @@ const TotalVstrkChart: React.FC = () => {
               axisLine={false}
               tickLine={false}
               width={35}
-              domain={[140, 260]}
-              ticks={[140, 180, 220, 260]}
-              tickFormatter={(v) => `${v}M`}
+              domain={yDomain as any}
+              tickFormatter={(v) => `${v.toFixed(0)}M`}
             />
             <XAxis
-              dataKey="x"
+              dataKey="dateLabel"
               tick={{ fontSize: 11, fill: '#9ca3af' }}
               axisLine={false}
               tickLine={false}
+              interval="preserveStartEnd"
             />
 
-            {/* light background line */}
+            {/* subtle background fill */}
             <Area
               type="monotone"
-              dataKey="value2"
+              dataKey="value"
               stroke="#CBD5F5"
               strokeWidth={2}
               fill="url(#vstrkBg)"
@@ -106,13 +142,14 @@ const TotalVstrkChart: React.FC = () => {
               fill="url(#vstrkMain)"
             />
 
-            {/* dashed vertical line at selected x */}
-            <ReferenceLine
-              x={selectedX}
-              stroke="#6366F1"
-              strokeDasharray="4 4"
-              strokeWidth={1}
-            />
+            {selectedX ? (
+              <ReferenceLine
+                x={selectedX}
+                stroke="#6366F1"
+                strokeDasharray="4 4"
+                strokeWidth={1}
+              />
+            ) : null}
 
             <Tooltip
               content={<CustomTooltip />}
