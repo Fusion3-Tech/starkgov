@@ -9,6 +9,7 @@ import type { TransformedProposal } from '@/hooks/helpers';
 import { getBlockieDataUrl } from '@/lib/blockies';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
+import ReactMarkdown from 'react-markdown';
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -98,7 +99,11 @@ const ProposalPage: React.FC = () => {
                 </div>
 
                 <article className={styles.body}>
-                  {proposal.body ? proposal.body : 'No description provided.'}
+                  {proposal.body ? (
+                    <ReactMarkdown>{proposal.body}</ReactMarkdown>
+                  ) : (
+                    'No description provided.'
+                  )}
                 </article>
               </div>
 
