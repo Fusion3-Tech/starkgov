@@ -41,6 +41,10 @@ const RecentProposalsCard: React.FC<RecentProposalsCardProps> = ({
   };
 
   const badgeText = status === 'passed' ? 'Passed' : 'Rejected';
+  const emptyText =
+    status === 'passed'
+      ? 'No passed proposals yet.'
+      : 'No rejected proposals yet.';
 
   return (
     <section className={styles.card}>
@@ -49,41 +53,45 @@ const RecentProposalsCard: React.FC<RecentProposalsCardProps> = ({
       </header>
 
       <div className={styles.list}>
-        {proposals.map((p) => (
-          <div key={p.id} className={styles.row}>
-            <div className={styles.left}>
-              <div className={styles.avatar}>
-                {(() => {
-                  const blockie = getBlockieDataUrl(p.author);
-                  return blockie ? (
-                    <img src={blockie} alt={p.author} />
-                  ) : (
-                    <span className={styles.avatarFallback}>
-                      {p.author}
-                    </span>
-                  );
-                })()}
-              </div>
+        {proposals.length === 0 ? (
+          <div className={styles.empty}>{emptyText}</div>
+        ) : (
+          proposals.map((p) => (
+            <div key={p.id} className={styles.row}>
+              <div className={styles.left}>
+                <div className={styles.avatar}>
+                  {(() => {
+                    const blockie = getBlockieDataUrl(p.author);
+                    return blockie ? (
+                      <img src={blockie} alt={p.author} />
+                    ) : (
+                      <span className={styles.avatarFallback}>
+                        {p.author}
+                      </span>
+                    );
+                  })()}
+                </div>
 
-              <div className={styles.meta}>
-                <div className={styles.proposalTitle}>{p.title || p.id}</div>
-                <div className={styles.date}>
-                  {p.created
-                    ? formatDate(new Date(p.created * 1000).toISOString())
-                    : '—'}
+                <div className={styles.meta}>
+                  <div className={styles.proposalTitle}>{p.title || p.id}</div>
+                  <div className={styles.date}>
+                    {p.created
+                      ? formatDate(new Date(p.created * 1000).toISOString())
+                      : '—'}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <span
-              className={`${styles.badge} ${
-                status === 'passed' ? styles.badgePassed : styles.badgeRejected
-              }`}
-            >
-              {badgeText}
-            </span>
-          </div>
-        ))}
+              <span
+                className={`${styles.badge} ${
+                  status === 'passed' ? styles.badgePassed : styles.badgeRejected
+                }`}
+              >
+                {badgeText}
+              </span>
+            </div>
+          ))
+        )}
       </div>
     </section>
   );

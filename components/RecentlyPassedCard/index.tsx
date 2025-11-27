@@ -12,7 +12,7 @@ const RecentlyPassedCard: React.FC = () => {
 
   const proposals = Array.isArray(data)
     ? (data as TransformedProposal[])
-        .filter((p) => p.state === 'closed' && p.scores[0] > p.scores[1])
+        .filter((p) => p.state === 'closed' && Number(p.scores[0]) > Number(p.scores[1]))
         .sort((a, b) => (b.created || 0) - (a.created || 0))
         .slice(0, 5)
     : [];
