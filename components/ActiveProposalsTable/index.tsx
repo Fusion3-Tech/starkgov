@@ -5,8 +5,8 @@ import styles from './ActiveProposalsTable.module.scss';
 import { useProposals } from '@/hooks/useProposals';
 import { TransformedProposal } from '@/hooks/helpers';
 import { getBlockieDataUrl } from '@/lib/blockies';
-import Link from 'next/link';
 import { formatCompactNumber } from '@/lib/format';
+import { useRouter } from 'next/navigation';
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
@@ -31,6 +31,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   proposals: proposalsFromProps,
 }) => {
   const { data, error } = useProposals();
+  const router = useRouter();
 
   const proposals = useMemo<TransformedProposal[]>(() => {
     if (proposalsFromProps) return proposalsFromProps;
@@ -128,7 +129,19 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
 
         <div className={styles.tableBody}>
           {filteredProposals.map((p) => (
-            <div key={p.id} className={styles.row}>
+            <div
+              key={p.id}
+              className={styles.rowLink}
+              role="link"
+              tabIndex={0}
+              onClick={() => router.push(`/proposals/${p.id}`)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  router.push(`/proposals/${p.id}`);
+                }
+              }}
+            >
               <div className={styles.accountCell}>
                 <div className={styles.avatar}>
                   {(() => {
@@ -150,11 +163,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
                 </div>
               </div>
 
-              <div className={styles.titleCell}>
-                <Link href={`/proposals/${p.id}`} className={styles.link}>
-                  {p.title || p.id}
-                </Link>
-              </div>
+              <div className={styles.titleCell}>{p.title || p.id}</div>
               <div className={styles.createdCell}>{formatDate(p.created)}</div>
               <div className={styles.commentsCell}>
                 {formatCompactNumber(p.scores_total)}

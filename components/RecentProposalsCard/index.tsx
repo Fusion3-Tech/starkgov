@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './RecentProposalsCard.module.scss';
 import type { TransformedProposal } from '@/hooks/helpers';
 import { getBlockieDataUrl } from '@/lib/blockies';
+import Link from 'next/link';
 
 export type ProposalStatus = 'passed' | 'rejected';
 
@@ -42,43 +43,43 @@ const RecentProposalsCard: React.FC<RecentProposalsCardProps> = ({
           <div className={styles.empty}>{emptyText}</div>
         ) : (
           proposals.map((p) => (
-            <div key={p.id} className={styles.row}>
-              <div className={styles.left}>
-                <div className={styles.avatar}>
-                  {(() => {
-                    const blockie = getBlockieDataUrl(p.author);
-                    return blockie ? (
-                      <img src={blockie} alt={p.author} />
-                    ) : (
-                      <span className={styles.avatarFallback}>
-                        {p.author}
-                      </span>
-                    );
-                  })()}
-                </div>
+            <Link
+              key={p.id}
+              href={`/proposals/${p.id}`}
+              className={styles.rowLink}
+            >
+              <div className={styles.row}>
+                <div className={styles.left}>
+                  <div className={styles.avatar}>
+                    {(() => {
+                      const blockie = getBlockieDataUrl(p.author);
+                      return blockie ? (
+                        <img src={blockie} alt={p.author} />
+                      ) : (
+                        <span className={styles.avatarFallback}>{p.author}</span>
+                      );
+                    })()}
+                  </div>
 
-                <div className={styles.meta}>
-                <div className={styles.proposalTitle}>
-                  <a href={`/proposals/${p.id}`} className={styles.link}>
-                    {p.title || p.id}
-                  </a>
-                </div>
-                  <div className={styles.date}>
-                    {p.created
-                      ? formatDate(new Date(p.created * 1000).toISOString())
-                      : '—'}
+                  <div className={styles.meta}>
+                    <div className={styles.proposalTitle}>{p.title || p.id}</div>
+                    <div className={styles.date}>
+                      {p.created
+                        ? formatDate(new Date(p.created * 1000).toISOString())
+                        : '—'}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <span
-                className={`${styles.badge} ${
-                  status === 'passed' ? styles.badgePassed : styles.badgeRejected
-                }`}
-              >
-                {badgeText}
-              </span>
-            </div>
+                <span
+                  className={`${styles.badge} ${
+                    status === 'passed' ? styles.badgePassed : styles.badgeRejected
+                  }`}
+                >
+                  {badgeText}
+                </span>
+              </div>
+            </Link>
           ))
         )}
       </div>
