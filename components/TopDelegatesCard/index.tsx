@@ -3,6 +3,7 @@
 import React from 'react';
 import styles from './TopDelegatesCard.module.scss';
 import { useDelegates } from '@/hooks/useDelegates';
+import { getBlockieDataUrl } from '@/lib/blockies';
 import type { SyntheticEvent } from 'react';
 
 export interface DelegateItem {
@@ -20,15 +21,6 @@ interface TopDelegatesCardProps {
 const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
   delegates,
 }) => {
-  const DEFAULT_AVATAR =
-    'data:image/svg+xml;utf8,' +
-    encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
-        <circle cx="40" cy="40" r="40" fill="#e5e7eb"/>
-        <circle cx="40" cy="32" r="14" fill="#d1d5db"/>
-        <path d="M14 66c3.5-10.5 13.4-18 26-18s22.5 7.5 26 18" fill="#cbd5e1"/>
-      </svg>`
-    );
 
   const {
     delegates: fetchedDelegates,
@@ -79,6 +71,7 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
         name: displayName,
         votes: formatVotes(votesValueRaw),
         rank: idx + 1,
+        // Prefer user-provided avatars; otherwise use blockies for the address.
         avatarUrl:
           extra?.avatarUrl ||
           extra?.avatar ||
@@ -87,7 +80,7 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
           author?.profileImage ||
           author?.ensAvatar ||
           getSocialAvatar() ||
-          DEFAULT_AVATAR,
+          getBlockieDataUrl(address || extra?.id || String(idx)),
       };
     });
 
@@ -109,11 +102,11 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
             <div className={styles.left}>
               <div className={styles.avatar}>
                 <img
-                  src={d.avatarUrl || DEFAULT_AVATAR}
+                  src={d.avatarUrl || getBlockieDataUrl(String(d.id))}
                   alt={d.name}
                   onError={(e: SyntheticEvent<HTMLImageElement>) => {
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = DEFAULT_AVATAR;
+                    e.currentTarget.src = getBlockieDataUrl(String(d.id));
                   }}
                 />
               </div>
