@@ -1,20 +1,27 @@
 'use client';
 
 import React from 'react';
-import RecentProposalsCard, {
-  RecentProposal,
-} from '../RecentProposalsCard';
+import RecentProposalsCard from '../RecentProposalsCard';
+import { useProposals } from '@/hooks/useProposals';
+import type { TransformedProposal } from '@/hooks/helpers';
 
-interface RecentlyRejectedCardProps {
-  proposals?: RecentProposal[];
-}
+const RecentlyRejectedCard: React.FC = () => {
+  const { data } = useProposals();
 
-const RecentlyRejectedCard: React.FC<RecentlyRejectedCardProps> = ({ proposals }) => (
-  <RecentProposalsCard
-    title="Recently Rejected"
-    status="rejected"
-    proposals={proposals}
-  />
-);
+  const proposals = Array.isArray(data)
+    ? (data as TransformedProposal[])
+        .filter((p) => p.state === 'closed' && Number(p.scores[0]) < Number(p.scores[1]))
+        .sort((a, b) => (b.created || 0) - (a.created || 0))
+        .slice(0, 5)
+    : [];
+
+  return (
+    <RecentProposalsCard
+      title="Recently Rejected"
+      status="rejected"
+      proposals={proposals}
+    />
+  );
+};
 
 export default RecentlyRejectedCard;
