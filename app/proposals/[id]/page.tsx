@@ -37,7 +37,7 @@ const ProposalPage: React.FC = () => {
 
   const proposal = useMemo(() => {
     if (!Array.isArray(data)) return null;
-    return data.find((p) => p.id === id || p.proposal_id === id);
+    return data.find((p) => p.id === id);
   }, [data, id]);
 
   const scores = (proposal?.scores || []).map((s) => Number(s) || 0);
@@ -73,7 +73,7 @@ const ProposalPage: React.FC = () => {
           </header>
 
           {loading && !proposal ? <div className={styles.status}>Loading proposal...</div> : null}
-          {error && <div className={styles.error}>Failed to load proposal: {error}</div>}
+          {error && <div className={styles.error}>Failed to load proposal: {error.message}</div>}
           {!loading && !proposal && !error ? (
             <div className={styles.status}>Proposal not found.</div>
           ) : null}
