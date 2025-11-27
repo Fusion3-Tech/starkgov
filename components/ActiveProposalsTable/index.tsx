@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './ActiveProposalsTable.module.scss';
 import { useProposals } from '@/hooks/useProposals';
 import { TransformedProposal } from '@/hooks/helpers';
