@@ -1,6 +1,14 @@
+.sidebarContainer {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  height: calc(100vh - 40px);
+  z-index: 200; /* Sidebar always on top */
+}
+
 .sidebar {
   width: 240px;
-  min-height: 100vh;
+  height: 96vh;
   background: #ffffff;
   border-radius: 24px;
   padding: 26px 18px 28px;
@@ -9,12 +17,15 @@
   gap: 26px;
   box-sizing: border-box;
   box-shadow: 0 15px 35px rgba(16, 24, 40, 0.08);
+  position: relative;
+  z-index: 201; /* Sidebar above everything */
 }
 
 .brand {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 600;
   margin-bottom: 8px;
+  text-align: center;
   color: #0f172a;
 }
 
@@ -73,7 +84,6 @@
   flex: 1;
 }
 
-/* badge for inbox */
 .badge {
   min-width: 22px;
   height: 22px;
@@ -88,8 +98,6 @@
   justify-content: center;
 }
 
-/* Settings section */
-
 .settingsSection {
   margin-top: 8px;
 }
@@ -99,4 +107,78 @@
   color: #9da3b4;
   margin-bottom: 12px;
   font-weight: 700;
+}
+
+/* MOBILE STYLES */
+.closeButton {
+  display: none;
+}
+
+.backdrop {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .sidebarContainer {
+    position: static;
+    height: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 40vw;
+    min-width: 260px;
+    max-width: 420px;
+    border-radius: 0 20px 20px 0;
+    padding: 24px 18px 28px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    z-index: 300; /* even higher for mobile */
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: none;
+    background: #f1f5f9;
+    color: #0f172a;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    cursor: pointer;
+  }
+
+  .closeIcon {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 250;
+  }
+
+  .backdropVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }

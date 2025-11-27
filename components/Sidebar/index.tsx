@@ -1,84 +1,142 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styles from './Sidebar.module.scss';
+import React, { useEffect } from "react";
+import styles from "./Sidebar.module.scss";
 
 interface NavItem {
   label: string;
   key: string;
   hasBadge?: boolean;
   badgeCount?: number;
-  section?: 'main' | 'settings';
+  section?: "main" | "settings";
   active?: boolean;
 }
 
 const mainItems: NavItem[] = [
-  { label: 'Dashboard', key: 'dashboard', active: true },
-  { label: 'Proposals', key: 'proposals' },
-  { label: 'Delegates', key: 'delegates' },
-  { label: 'Submit Proposal', key: 'submit-proposal' },
-  { label: 'Voting Power', key: 'voting-power' },
-  { label: 'Analytics', key: 'analytics' },
+  { label: "Dashboard", key: "dashboard", active: true },
+  { label: "Proposals", key: "proposals" },
+  { label: "Delegates", key: "delegates" },
+  { label: "Submit Proposal", key: "submit-proposal" },
+  { label: "Voting Power", key: "voting-power" },
+  { label: "Analytics", key: "analytics" },
 ];
 
 const settingsItems: NavItem[] = [
-  { label: 'Notifications', key: 'notifications', hasBadge: true, badgeCount: 8 },
-  { label: 'Docs', key: 'docs' },
-  { label: 'Settings', key: 'settings' },
+  {
+    label: "Notifications",
+    key: "notifications",
+    hasBadge: true,
+    badgeCount: 8,
+  },
+  { label: "Docs", key: "docs" },
+  { label: "Settings", key: "settings" },
 ];
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isMobileOpen?: boolean;
+  onClose?: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
+  useEffect(() => {
+    if (!isMobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobileOpen]);
+
   // later you can lift this state up and set active by route
   const handleClick = (key: string) => {
-    console.log('Clicked:', key);
+    console.log("Clicked:", key);
+    if (onClose) onClose();
   };
 
   return (
-    <aside className={styles.sidebar}>
-      {/* Brand */}
-      <div className={styles.brand}>StarkGov</div>
+    <div className={styles.sidebarContainer}>
+      <aside
+        className={`${styles.sidebar} ${
+          isMobileOpen ? styles.sidebarOpen : ""
+        }`}
+        aria-hidden={
+          !isMobileOpen &&
+          typeof window !== "undefined" &&
+          window.innerWidth < 1200
+        }
+      >
+        {/* Brand */}
+        <div className={styles.brand}>StarkGov</div>
 
-      {/* Main nav */}
-      <nav className={styles.nav}>
-        {mainItems.map((item: NavItem) => (
+        {/* Close button (mobile) */}
+        {onClose ? (
           <button
-            key={item.key}
-            className={`${styles.navItem} ${
-              item.active ? styles.navItemActive : ''
-            }`}
-            onClick={() => handleClick(item.key)}
+            type="button"
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Close menu"
           >
-            <span className={styles.iconWrapper}>
-              {renderIcon(item.key, item.active || false)}
-            </span>
-            <span className={styles.label}>{item.label}</span>
+            <img
+              src="/close.png"
+              alt="Close menu"
+              className={styles.closeIcon}
+            />
           </button>
-        ))}
-      </nav>
+        ) : null}
 
-      {/* Settings section */}
-      <div className={styles.settingsSection}>
-        <div className={styles.settingsTitle}>Other</div>
+        {/* Main nav */}
         <nav className={styles.nav}>
-          {settingsItems.map((item) => (
+          {mainItems.map((item: NavItem) => (
             <button
               key={item.key}
-              className={styles.navItem}
+              className={`${styles.navItem} ${
+                item.active ? styles.navItemActive : ""
+              }`}
               onClick={() => handleClick(item.key)}
             >
               <span className={styles.iconWrapper}>
-                {renderIcon(item.key, false)}
+                {renderIcon(item.key, item.active || false)}
               </span>
               <span className={styles.label}>{item.label}</span>
-
-              {item.hasBadge && item.badgeCount && (
-                <span className={styles.badge}>{item.badgeCount}</span>
-              )}
             </button>
           ))}
         </nav>
-      </div>
-    </aside>
+
+        {/* Settings section */}
+        <div className={styles.settingsSection}>
+          <div className={styles.settingsTitle}>Other</div>
+          <nav className={styles.nav}>
+            {settingsItems.map((item) => (
+              <button
+                key={item.key}
+                className={styles.navItem}
+                onClick={() => handleClick(item.key)}
+              >
+                <span className={styles.iconWrapper}>
+                  {renderIcon(item.key, false)}
+                </span>
+                <span className={styles.label}>{item.label}</span>
+
+                {item.hasBadge && item.badgeCount && (
+                  <span className={styles.badge}>{item.badgeCount}</span>
+                )}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      {onClose ? (
+        <button
+          type="button"
+          className={`${styles.backdrop} ${
+            isMobileOpen ? styles.backdropVisible : ""
+          }`}
+          aria-label="Close menu overlay"
+          onClick={onClose}
+        />
+      ) : null}
+    </div>
   );
 };
 
@@ -87,7 +145,7 @@ export default Sidebar;
 /* simple inline icons just to mimic the design */
 function renderIcon(key: string, filled: boolean) {
   switch (key) {
-    case 'dashboard':
+    case "dashboard":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <rect x="2" y="2" width="7" height="7" rx="2" />
@@ -96,7 +154,7 @@ function renderIcon(key: string, filled: boolean) {
           <rect x="2" y="11" width="7" height="7" rx="2" />
         </svg>
       );
-    case 'analytics':
+    case "analytics":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon}>
           <rect x="2" y="11" width="3" height="7" rx="1" />
@@ -104,7 +162,7 @@ function renderIcon(key: string, filled: boolean) {
           <rect x="15" y="5" width="3" height="13" rx="1" />
         </svg>
       );
-    case 'proposals':
+    case "proposals":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <rect x="4" y="3" width="10" height="14" rx="2" />
@@ -113,7 +171,7 @@ function renderIcon(key: string, filled: boolean) {
           <path d="M6.5 10h3" />
         </svg>
       );
-    case 'delegates':
+    case "delegates":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <path d="M10 3 2.5 6.5 10 10l7.5-3.5L10 3Z" />
@@ -121,7 +179,7 @@ function renderIcon(key: string, filled: boolean) {
           <path d="M5 6.5 10 9l5-2.5" />
         </svg>
       );
-    case 'submit-proposal':
+    case "submit-proposal":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <rect x="4" y="3" width="10" height="14" rx="2" />
@@ -134,7 +192,7 @@ function renderIcon(key: string, filled: boolean) {
           <path d="M9 4 7 4c-1.1 0-2 .9-2 2v8" />
         </svg>
       );
-    case 'voting-power':
+    case "voting-power":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <circle cx="5.5" cy="7" r="2.3" />
@@ -144,21 +202,21 @@ function renderIcon(key: string, filled: boolean) {
           <path d="M12 7.8l-1 3" />
         </svg>
       );
-    case 'settings':
+    case "settings":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon}>
           <circle cx="10" cy="10" r="3" />
           <path d="M4 10h-2m16 0h-2M10 4V2m0 16v-2M5.5 5.5 4 4m12 12-1.5-1.5M5.5 14.5 4 16m12-12-1.5 1.5" />
         </svg>
       );
-    case 'notifications':
+    case "notifications":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <path d="M10 17a2 2 0 0 0 2-2H8a2 2 0 0 0 2 2Z" />
           <path d="M15 7a5 5 0 1 0-10 0c0 4-1.5 5-1.5 5H16.5S15 11 15 7Z" />
         </svg>
       );
-    case 'docs':
+    case "docs":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
           <path d="M5 4h6.5a3.5 3.5 0 0 1 3.5 3.5V16" />

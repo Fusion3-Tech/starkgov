@@ -4,7 +4,8 @@
   padding: 24px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
   border: 1px solid #eef0f5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    sans-serif;
 }
 
 .header {
@@ -98,8 +99,15 @@
   fill: none;
 }
 
+/* TABLE WITH FIXED HEIGHT + SCROLLABLE BODY */
 .table {
   width: 100%;
+  margin-top: 8px;
+
+  /* fixed height for proposals area inside the card */
+  max-height: 420px; /* adjust this value if you want more/less height */
+  display: flex;
+  flex-direction: column;
 }
 
 .tableHeader {
@@ -111,10 +119,21 @@
   color: #9ca3af;
   padding: 8px 8px 8px 0;
   border-bottom: 1px solid #e5e7eb;
+
+  /* keep header visible while scrolling */
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
 }
 
 .tableBody {
   margin-top: 4px;
+  flex: 1 1 auto;
+
+  /* scroll only inside proposals list */
+  overflow-y: auto;
 }
 
 .row {
@@ -135,16 +154,15 @@
   padding: 14px 8px 14px 0;
   column-gap: 8px;
   border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
 }
 
-.row:last-of-type {
+.row:last-of-type,
+.rowLink:last-of-type {
   border-bottom: none;
 }
 
-.row:hover {
-  background: #f9fafb;
-}
-
+.row:hover,
 .rowLink:hover {
   background: #f9fafb;
 }
@@ -277,9 +295,15 @@
 @media (max-width: 768px) {
   .tableHeader {
     display: none;
+    position: static;
   }
 
-  .row {
+  .table {
+    max-height: 420px; /* still fixed-height area on mobile */
+  }
+
+  .row,
+  .rowLink {
     grid-template-columns: 1.8fr 1.2fr 1fr;
     grid-template-rows: auto auto;
     row-gap: 8px;

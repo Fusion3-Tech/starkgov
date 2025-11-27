@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import styles from './Dashboard.module.scss';
 
 import Sidebar from '@/components/Sidebar';
@@ -13,12 +14,14 @@ import RecentlyRejectedCard from '@/components/RecentlyRejectedCard';
 import ActiveProposalsTable from '@/components/ActiveProposalsTable';
 
 export default function DashboardPage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className={styles.shell}>
-      <Sidebar />
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className={styles.main}>
-        <Header />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
 
         <div className={styles.grid}>
           {/* Row 1 */}

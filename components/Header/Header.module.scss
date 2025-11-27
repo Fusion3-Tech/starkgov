@@ -7,6 +7,22 @@
   padding: 10px 0;
 }
 
+.menuButton {
+  display: none;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+
 /* ---------- Search ---------- */
 
 .searchWrapper {
@@ -122,4 +138,14 @@
 .connectButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+@media (max-width: 1200px) {
+  .menuButton {
+    display: inline-flex;
+  }
+
+  .header {
+    gap: 14px;
+  }
 }

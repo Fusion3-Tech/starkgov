@@ -34,12 +34,18 @@ const WALLET_OPTIONS: WalletOption[] = [
     description: 'Smart-account wallet for Starknet.',
   },
   {
-    id: 'okx-wallet',
-    name: 'OKX Wallet',
-    installUrl: 'https://www.okx.com/web3',
-    description: 'Multi-chain wallet with Starknet support.',
+  id: 'okx-wallet',
+  name: 'OKX Wallet',
+  installUrl: 'https://www.okx.com/web3',
+  description: 'Multi-chain wallet with Starknet support.',
   },
 ];
+
+const WALLET_ICONS: Record<string, string> = {
+  argentX: '/argent.png',
+  braavos: '/braavos.png',
+  'okx-wallet': '/okx.png',
+};
 
 const WalletModal: React.FC<WalletModalProps> = ({
   open,
@@ -83,13 +89,20 @@ const WalletModal: React.FC<WalletModalProps> = ({
         <div className={styles.walletList}>
           {WALLET_OPTIONS.map((wallet) => {
             const installed = installedById(wallet.id) || installedById(wallet.name);
+            const iconSrc = WALLET_ICONS[wallet.id] || WALLET_ICONS[wallet.name];
             return (
               <div
                 key={wallet.id}
                 className={`${styles.walletRow} ${installed ? '' : styles.walletRowDisabled}`}
               >
                 <div className={styles.walletInfo}>
-                  <div className={styles.walletIcon}>{wallet.name.slice(0, 1)}</div>
+                  <div className={styles.walletIcon}>
+                    {iconSrc ? (
+                      <img src={iconSrc} alt={`${wallet.name} logo`} />
+                    ) : (
+                      wallet.name.slice(0, 1)
+                    )}
+                  </div>
                   <div>
                     <div className={styles.walletName}>{wallet.name}</div>
                     <div className={styles.walletDesc}>{wallet.description}</div>

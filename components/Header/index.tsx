@@ -5,7 +5,11 @@ import styles from './Header.module.scss';
 import { useStarknetWallet } from '@/hooks/useStarknetWallet';
 import WalletModal from '../WalletModal';
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
     useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
@@ -13,6 +17,12 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
+      {onMenuClick ? (
+        <button type="button" className={styles.menuButton} onClick={onMenuClick} aria-label="Open menu">
+          ☰
+        </button>
+      ) : null}
+
       {/* Search */}
       <div className={styles.searchWrapper}>
         <input
