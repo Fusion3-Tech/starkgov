@@ -10,6 +10,8 @@ import { getBlockieDataUrl } from '@/lib/blockies';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import ReactMarkdown from 'react-markdown';
+import ProposalSummaryGauge from '@/components/ProposalSummaryGauge';
+import { formatCompactNumber } from '@/lib/format';
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -110,31 +112,22 @@ const ProposalPage: React.FC = () => {
               <aside className={styles.sidebar}>
                 <div className={styles.card}>
                   <h3 className={styles.cardTitle}>Summary</h3>
-                  <div className={styles.summaryRow}>
-                    <div className={styles.summaryItem}>
-                      <span className={styles.summaryLabel}>For</span>
-                      <span className={styles.summaryValue}>{percentages.for}%</span>
-                    </div>
-                    <div className={styles.summaryItem}>
-                      <span className={styles.summaryLabel}>Against</span>
-                      <span className={styles.summaryValue}>{percentages.against}%</span>
-                    </div>
-                    <div className={styles.summaryItem}>
-                      <span className={styles.summaryLabel}>Abstain</span>
-                      <span className={styles.summaryValue}>{percentages.abstain}%</span>
-                    </div>
-                  </div>
+                  <ProposalSummaryGauge
+                    forPercent={percentages.for}
+                    againstPercent={percentages.against}
+                    abstainPercent={percentages.abstain}
+                  />
                   <div className={styles.voteTotals}>
                     <div>
                       <span className={styles.metaLabel}>Total votes</span>
                       <span className={styles.metaValue}>
-                        {totalVotes.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        {formatCompactNumber(totalVotes)}
                       </span>
                     </div>
                     <div>
                       <span className={styles.metaLabel}>Scores total</span>
                       <span className={styles.metaValue}>
-                        {proposal.scores_total?.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        {formatCompactNumber(proposal.scores_total)}
                       </span>
                     </div>
                   </div>
