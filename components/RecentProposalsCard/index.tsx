@@ -58,7 +58,11 @@ const RecentProposalsCard: React.FC<RecentProposalsCardProps> = ({
                 </div>
 
                 <div className={styles.meta}>
-                  <div className={styles.proposalTitle}>{p.title || p.id}</div>
+                <div className={styles.proposalTitle}>
+                  <a href={`/proposals/${p.id}`} className={styles.link}>
+                    {p.title || p.id}
+                  </a>
+                </div>
                   <div className={styles.date}>
                     {p.created
                       ? formatDate(new Date(p.created * 1000).toISOString())

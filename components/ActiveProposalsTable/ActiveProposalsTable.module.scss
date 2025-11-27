@@ -188,6 +188,15 @@
   font-weight: 500;
 }
 
+.titleCell .link {
+  color: #111827;
+  text-decoration: none;
+}
+
+.titleCell .link:hover {
+  text-decoration: underline;
+}
+
 .createdCell,
 .commentsCell {
   color: #4b5563;

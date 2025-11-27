@@ -5,6 +5,7 @@ import styles from './ActiveProposalsTable.module.scss';
 import { useProposals } from '@/hooks/useProposals';
 import { TransformedProposal } from '@/hooks/helpers';
 import { getBlockieDataUrl } from '@/lib/blockies';
+import Link from 'next/link';
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
@@ -148,7 +149,11 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
                 </div>
               </div>
 
-              <div className={styles.titleCell}>{p.title || p.id}</div>
+              <div className={styles.titleCell}>
+                <Link href={`/proposals/${p.id}`} className={styles.link}>
+                  {p.title || p.id}
+                </Link>
+              </div>
               <div className={styles.createdCell}>{formatDate(p.created)}</div>
               <div className={styles.commentsCell}>
                 {p.scores_total?.toLocaleString(undefined, {
