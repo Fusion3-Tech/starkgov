@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -9,15 +9,31 @@ import {
   ResponsiveContainer,
   Tooltip,
   ReferenceLine,
-} from 'recharts';
-import styles from './TotalVstrkChart.module.scss';
-import { useProposals } from '@/hooks/useProposals';
-import type { TransformedProposal } from '@/hooks/helpers';
+} from "recharts";
+import styles from "./TotalVstrkChart.module.scss";
+import { useProposals } from "@/hooks/useProposals";
+import type { TransformedProposal } from "@/hooks/helpers";
 
 type DataPoint = {
   x: number; // sequential index
   value: number; // in millions
   dateLabel: string;
+};
+
+// value is in MILLIONS already
+const formatYAxisValue = (v: number) => {
+  if (v >= 1_000) {
+    // 1300M -> 1.3B
+    return (v / 1000).toFixed(1) + "B";
+  }
+  return v.toFixed(0) + "M";
+};
+
+const formatTooltipValue = (v: number) => {
+  if (v >= 1_000) {
+    return (v / 1000).toFixed(2) + "B";
+  }
+  return v.toFixed(2) + "M";
 };
 
 const CustomTooltip: React.FC<{
@@ -32,7 +48,9 @@ const CustomTooltip: React.FC<{
 
   return (
     <div className={styles.tooltip}>
-      <div className={styles.tooltipValue}>{point.value.toFixed(2)}M</div>
+      <div className={styles.tooltipValue}>
+        {formatTooltipValue(point.value)}
+      </div>
       <div className={styles.tooltipSub}>{point.dateLabel}</div>
     </div>
   );
@@ -49,20 +67,20 @@ const TotalVstrkChart: React.FC = () => {
     return source
       .filter(
         (p) =>
-          typeof p.created === 'number' &&
-          typeof p.scores_total === 'number' &&
+          typeof p.created === "number" &&
+          typeof p.scores_total === "number" &&
           p.scores_total > 0
       )
       .sort((a, b) => (a.created || 0) - (b.created || 0))
       .map((p, idx) => ({
         x: idx + 1,
-        value: (p.scores_total || 0) / 1_000_000,
+        value: (p.scores_total || 0) / 1_000_000, // millions
         dateLabel: new Date((p.created || 0) * 1000).toLocaleDateString(
-          'en-US',
+          "en-US",
           {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
           }
         ),
       }));
@@ -108,16 +126,24 @@ const TotalVstrkChart: React.FC = () => {
             </defs>
 
             <YAxis
-              tick={{ fontSize: 10, fill: '#9ca3af' }}
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
               axisLine={false}
               tickLine={false}
-              width={35}
+              width={40}
               domain={yDomain as any}
-              tickFormatter={(v) => `${v.toFixed(0)}M`}
+              ticks={[
+                0,
+                yDomain[1] * 0.25,
+                yDomain[1] * 0.5,
+                yDomain[1] * 0.75,
+                yDomain[1],
+              ]}
+              tickFormatter={formatYAxisValue}
             />
+
             <XAxis
               dataKey="dateLabel"
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              tick={{ fontSize: 11, fill: "#9ca3af" }}
               axisLine={false}
               tickLine={false}
               interval="preserveStartEnd"
@@ -153,7 +179,7 @@ const TotalVstrkChart: React.FC = () => {
 
             <Tooltip
               content={<CustomTooltip />}
-              cursor={{ stroke: 'transparent' }}
+              cursor={{ stroke: "transparent" }}
             />
           </AreaChart>
         </ResponsiveContainer>
