@@ -5,6 +5,7 @@ import styles from './ProposalSearchModal.module.scss';
 import { useProposals } from '@/hooks/useProposals';
 import type { TransformedProposal } from '@/hooks/helpers';
 import { formatDate } from '@/lib/format';
+import { getBlockieDataUrl } from '@/lib/blockies';
 
 interface Props {
   open: boolean;
@@ -52,11 +53,21 @@ const ProposalSearchModal: React.FC<Props> = ({ open, onClose }) => {
           ) : (
             results.map((p) => (
               <a key={p.id} href={`/proposals/${p.id}`} className={styles.result}>
-                <div className={styles.resultTitle}>{p.title || p.id}</div>
-                <div className={styles.resultMeta}>
-                  <span>{p.author}</span>
-                  <span>•</span>
-                  <span>{formatDate(p.created)}</span>
+                <div className={styles.resultRow}>
+                  <div className={styles.resultAvatar}>
+                    {(() => {
+                      const blockie = getBlockieDataUrl(p.author || p.id);
+                      return blockie ? <img src={blockie} alt={p.author} /> : null;
+                    })()}
+                  </div>
+                  <div className={styles.resultText}>
+                    <div className={styles.resultTitle}>{p.title || p.id}</div>
+                    <div className={styles.resultMeta}>
+                      <span className={styles.metaItem}>{p.author}</span>
+                      <span className={styles.metaDot}>•</span>
+                      <span className={styles.metaItem}>{formatDate(p.created)}</span>
+                    </div>
+                  </div>
                 </div>
               </a>
             ))
