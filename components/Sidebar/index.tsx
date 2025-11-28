@@ -1,35 +1,31 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styles from "./Sidebar.module.scss";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavItem {
   label: string;
   key: string;
+  href?: string;
   hasBadge?: boolean;
   badgeCount?: number;
-  section?: "main" | "settings";
-  active?: boolean;
+  disabled?: boolean;
 }
 
 const mainItems: NavItem[] = [
-  { label: "Dashboard", key: "dashboard", active: true },
-  { label: "Proposals", key: "proposals" },
-  { label: "Delegates", key: "delegates" },
-  { label: "Submit Proposal", key: "submit-proposal" },
-  { label: "Voting Power", key: "voting-power" },
-  { label: "Analytics", key: "analytics" },
+  { label: "Dashboard", key: "dashboard", href: "/" },
+  { label: "Proposals", key: "proposals", href: "/proposals" },
+  { label: "Delegates", key: "delegates", disabled: true },
+  { label: "Submit Proposal", key: "submit-proposal", disabled: true },
+  { label: "Voting Power", key: "voting-power", disabled: true },
+  { label: "Analytics", key: "analytics", disabled: true },
 ];
 
 const settingsItems: NavItem[] = [
-  {
-    label: "Notifications",
-    key: "notifications",
-    hasBadge: true,
-    badgeCount: 8,
-  },
-  { label: "Docs", key: "docs" },
-  { label: "Settings", key: "settings" },
+  { label: "Notifications", key: "notifications", hasBadge: true, badgeCount: 8, disabled: true },
+  { label: "Docs", key: "docs", disabled: true },
+  { label: "Settings", key: "settings", disabled: true },
 ];
 
 interface SidebarProps {
@@ -38,6 +34,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   useEffect(() => {
     if (!isMobileOpen) return;
     const prev = document.body.style.overflow;
@@ -47,28 +46,50 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
     };
   }, [isMobileOpen]);
 
-  // later you can lift this state up and set active by route
-  const handleClick = (key: string) => {
-    console.log("Clicked:", key);
+  const activeKey = useMemo(() => {
+    if (pathname === "/") return "dashboard";
+    if (pathname.startsWith("/proposals")) return "proposals";
+    return "";
+  }, [pathname]);
+
+  const handleClick = (item: NavItem) => {
+    if (item.disabled) return;
+    if (item.href) {
+      router.push(item.href);
+    }
     if (onClose) onClose();
   };
+
+  const renderNav = (items: NavItem[]) =>
+    items.map((item) => (
+      <button
+        key={item.key}
+        className={`${styles.navItem} ${activeKey === item.key ? styles.navItemActive : ""} ${
+          item.disabled ? styles.navItemDisabled : ""
+        }`}
+        onClick={() => handleClick(item)}
+        disabled={item.disabled}
+      >
+        <span className={styles.iconWrapper}>
+          {renderIcon(item.key, activeKey === item.key)}
+        </span>
+        <span className={styles.label}>{item.label}</span>
+        {item.hasBadge && item.badgeCount ? (
+          <span className={styles.badge}>{item.badgeCount}</span>
+        ) : null}
+      </button>
+    ));
 
   return (
     <div className={styles.sidebarContainer}>
       <aside
-        className={`${styles.sidebar} ${
-          isMobileOpen ? styles.sidebarOpen : ""
-        }`}
+        className={`${styles.sidebar} ${isMobileOpen ? styles.sidebarOpen : ""}`}
         aria-hidden={
-          !isMobileOpen &&
-          typeof window !== "undefined" &&
-          window.innerWidth < 1200
+          !isMobileOpen && typeof window !== "undefined" && window.innerWidth < 1200
         }
       >
-        {/* Brand */}
         <div className={styles.brand}>StarkGov</div>
 
-        {/* Close button (mobile) */}
         {onClose ? (
           <button
             type="button"
@@ -76,62 +97,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
             onClick={onClose}
             aria-label="Close menu"
           >
-            <img
-              src="/close.png"
-              alt="Close menu"
-              className={styles.closeIcon}
-            />
+            <img src="/close.png" alt="Close menu" className={styles.closeIcon} />
           </button>
         ) : null}
 
-        {/* Main nav */}
-        <nav className={styles.nav}>
-          {mainItems.map((item: NavItem) => (
-            <button
-              key={item.key}
-              className={`${styles.navItem} ${
-                item.active ? styles.navItemActive : ""
-              }`}
-              onClick={() => handleClick(item.key)}
-            >
-              <span className={styles.iconWrapper}>
-                {renderIcon(item.key, item.active || false)}
-              </span>
-              <span className={styles.label}>{item.label}</span>
-            </button>
-          ))}
-        </nav>
+        <nav className={styles.nav}>{renderNav(mainItems)}</nav>
 
-        {/* Settings section */}
         <div className={styles.settingsSection}>
           <div className={styles.settingsTitle}>Other</div>
-          <nav className={styles.nav}>
-            {settingsItems.map((item) => (
-              <button
-                key={item.key}
-                className={styles.navItem}
-                onClick={() => handleClick(item.key)}
-              >
-                <span className={styles.iconWrapper}>
-                  {renderIcon(item.key, false)}
-                </span>
-                <span className={styles.label}>{item.label}</span>
-
-                {item.hasBadge && item.badgeCount && (
-                  <span className={styles.badge}>{item.badgeCount}</span>
-                )}
-              </button>
-            ))}
-          </nav>
+          <nav className={styles.nav}>{renderNav(settingsItems)}</nav>
         </div>
       </aside>
 
       {onClose ? (
         <button
           type="button"
-          className={`${styles.backdrop} ${
-            isMobileOpen ? styles.backdropVisible : ""
-          }`}
+          className={`${styles.backdrop} ${isMobileOpen ? styles.backdropVisible : ""}`}
           aria-label="Close menu overlay"
           onClick={onClose}
         />
