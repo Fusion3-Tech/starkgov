@@ -277,23 +277,109 @@
 
 .choiceRow {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
   border: 1px solid #eef0f5;
   border-radius: 12px;
   background: #f9fafb;
+  box-shadow: none;
+}
+
+.choice-for {
+  border-color: #eef0f5;
+  background: #f9fafb;
+}
+
+.choice-against {
+  border-color: #eef0f5;
+  background: #f9fafb;
+}
+
+.choice-neutral {
+  border-color: #eef0f5;
+  background: #f9fafb;
+}
+
+.choiceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .choiceName {
-  font-size: 13px;
+  font-size: 14px;
   color: #0f172a;
+  font-weight: 700;
+}
+
+.choiceMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
 }
 
 .choiceValue {
   font-size: 13px;
   color: #111827;
-  font-weight: 600;
+  font-weight: 700;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+
+.choicePercent {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  padding: 4px 8px;
+  background: #eef2ff;
+  border-radius: 10px;
+}
+
+.choiceBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.choiceBarFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9ca3af, #6b7280);
+}
+
+.choice-for .choiceBarFill {
+  background: linear-gradient(90deg, #43ac6a, #16a34a);
+}
+
+.choice-against .choiceBarFill {
+  background: linear-gradient(90deg, #f14b4b, #ef4444);
+}
+
+.choice-neutral .choiceBarFill {
+  background: linear-gradient(90deg, #89898a, #9ca3af);
+}
+
+.choice-for .choicePercent {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.choice-against .choicePercent {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.choice-neutral .choicePercent {
+  color: #374151;
+  background: #e5e7eb;
 }
 
 @media (max-width: 1024px) {
