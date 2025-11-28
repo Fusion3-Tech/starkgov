@@ -150,6 +150,15 @@
   object-fit: cover;
 }
 
+.accountAvatarFill {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #f1f5f9;
+  background-size: cover;
+  background-position: center;
+}
+
 .accountInitials {
   padding: 0 6px;
 }

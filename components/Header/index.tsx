@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import styles from "./Header.module.scss";
 import { useStarknetWallet } from "@/hooks/useStarknetWallet";
 import WalletModal from "../WalletModal";
@@ -22,6 +22,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
   } = useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [accountIcon, setAccountIcon] = useState("");
+
   const isConnected = !!wallet && accounts.length > 0;
   const primaryAccount = accounts[0];
 
@@ -31,10 +33,20 @@ export default function Header({ onMenuClick }: HeaderProps) {
     return `${primaryAccount.slice(0, 10)}...${primaryAccount.slice(-10)}`;
   }, [primaryAccount]);
 
-  const accountIcon = useMemo(
-    () => getBlockieDataUrl(primaryAccount),
-    [primaryAccount]
-  );
+  useEffect(() => {
+    if (!primaryAccount) {
+      setAccountIcon("");
+      return;
+    }
+    const loadIcon = () => setAccountIcon(getBlockieDataUrl(primaryAccount));
+    loadIcon();
+    const retry = setTimeout(loadIcon, 200);
+    return () => clearTimeout(retry);
+  }, [primaryAccount]);
+
+  const accountAvatarStyle = accountIcon
+    ? { backgroundImage: `url(${accountIcon})`, backgroundSize: 'cover' as const }
+    : undefined;
 
   return (
     <header className={styles.header}>
@@ -98,12 +110,17 @@ export default function Header({ onMenuClick }: HeaderProps) {
               <span className={styles.accountFull}>{primaryAccount}</span>
               <span className={styles.accountShort}>{shortAccount}</span>
             </span>
-            <span className={styles.accountAvatar}>
-              {accountIcon ? (
-                <img src={accountIcon} alt="" aria-hidden="true" />
-              ) : (
-                <span className={styles.accountInitials}>{shortAccount}</span>
-              )}
+            <span className={styles.accountAvatar} key={primaryAccount || "no-account"}>
+              <span
+                className={styles.accountAvatarFill}
+                style={accountAvatarStyle}
+                aria-hidden="true"
+              />
+              {!accountIcon ? (
+                <span className={styles.accountInitials}>
+                  {shortAccount || primaryAccount || "??"}
+                </span>
+              ) : null}
             </span>
           </button>
         ) : (

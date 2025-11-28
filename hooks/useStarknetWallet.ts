@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface StarknetWindowObject {
   id: string;
@@ -34,6 +34,7 @@ const getWindowWallets = (): StarknetWindowObject[] => {
 };
 
 export function useStarknetWallet() {
+  const STORAGE_KEY = 'starknet:lastWalletId';
   const [wallet, setWallet] = useState<StarknetWindowObject | null>(null);
   const [accounts, setAccounts] = useState<string[]>([]);
   const [chainId, setChainId] = useState<string | undefined>();
@@ -42,6 +43,7 @@ export function useStarknetWallet() {
   const [availableWallets, setAvailableWallets] = useState<StarknetWindowObject[]>(() =>
     getWindowWallets()
   );
+  const [hasAttemptedReconnect, setHasAttemptedReconnect] = useState(false);
 
   const connectWallet = useCallback(
     async (preferredId?: string): Promise<StarknetWalletConnection | null> => {
@@ -85,6 +87,10 @@ export function useStarknetWallet() {
         setAccounts(accountsResult);
         setChainId(currentChain);
 
+        if (typeof window !== 'undefined' && target.id) {
+          localStorage.setItem(STORAGE_KEY, target.id);
+        }
+
         return { wallet: target, accounts: accountsResult, chainId: currentChain };
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to connect Starknet wallet.');
@@ -101,7 +107,20 @@ export function useStarknetWallet() {
     setAccounts([]);
     setChainId(undefined);
     setError(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY);
+    }
   }, []);
+
+  useEffect(() => {
+    if (hasAttemptedReconnect || connecting || wallet) return;
+    setHasAttemptedReconnect(true);
+    if (typeof window === 'undefined') return;
+    const lastId = localStorage.getItem(STORAGE_KEY);
+    if (lastId) {
+      void connectWallet(lastId);
+    }
+  }, [hasAttemptedReconnect, connecting, wallet, connectWallet]);
 
   return {
     wallet,
