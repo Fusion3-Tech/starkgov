@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './Header.module.scss';
 import { useStarknetWallet } from '@/hooks/useStarknetWallet';
 import WalletModal from '../WalletModal';
+import ProposalSearchModal from '../ProposalSearchModal';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -13,6 +14,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
     useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
 
   return (
@@ -29,6 +31,9 @@ export default function Header({ onMenuClick }: HeaderProps) {
           type="text"
           placeholder="Search"
           className={styles.searchInput}
+          onFocus={() => setShowSearchModal(true)}
+          onClick={() => setShowSearchModal(true)}
+          readOnly
         />
         <span className={styles.searchIcon}>
           <svg
@@ -95,6 +100,11 @@ export default function Header({ onMenuClick }: HeaderProps) {
           disconnectWallet();
           setShowWalletModal(false);
         }}
+      />
+
+      <ProposalSearchModal
+        open={showSearchModal}
+        onClose={() => setShowSearchModal(false)}
       />
     </header>
   );

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import styles from "./ActiveProposalsTable.module.scss";
-import { useProposals } from "@/hooks/useProposals";
-import { TransformedProposal } from "@/hooks/helpers";
-import { getBlockieDataUrl } from "@/lib/blockies";
-import { formatCompactNumber } from "@/lib/format";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo, useState } from 'react';
+import styles from './ActiveProposalsTable.module.scss';
+import { useProposals } from '@/hooks/useProposals';
+import { TransformedProposal } from '@/hooks/helpers';
+import { getBlockieDataUrl } from '@/lib/blockies';
+import { formatCompactNumber } from '@/lib/format';
+import { useRouter } from 'next/navigation';
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
