@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
+  title?: string;
 }
 
 const formatDate = (timestamp?: number) =>
@@ -29,6 +30,7 @@ const formatAccount = (account?: string) => {
 
 const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   proposals: proposalsFromProps,
+  title = "Recent Proposals",
 }) => {
   const { data, error } = useProposals();
   const router = useRouter();
@@ -66,7 +68,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
     return (
       <section className={styles.card}>
         <header className={styles.header}>
-          <h2 className={styles.title}>Recent Proposals</h2>
+          <h2 className={styles.title}>{title}</h2>
         </header>
         <div className={styles.emptyState}>Unable to load proposals.</div>
       </section>
@@ -76,7 +78,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   return (
     <section className={styles.card}>
       <header className={styles.header}>
-        <h2 className={styles.title}>Recent Proposals</h2>
+        <h2 className={styles.title}>{title}</h2>
 
         <div className={styles.headerControls}>
           <div className={styles.sortWrapper}>

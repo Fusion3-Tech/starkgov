@@ -40,7 +40,7 @@ export default function DashboardPage() {
 
           {/* Row 2 */}
           <div className={styles.activeProposalsArea}>
-            <ActiveProposalsTable />
+            <ActiveProposalsTable title="Recent Proposals" />
           </div>
 
           <div className={styles.recentArea}>
