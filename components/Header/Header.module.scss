@@ -10,8 +10,8 @@
 .menuButton {
   display: none;
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 45px;
+  height: 45px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
   background: #ffffff;
@@ -69,8 +69,8 @@
 /* ---------- Bell ---------- */
 
 .bellButton {
-  width: 38px;
-  height: 38px;
+  width: 45px;
+  height: 45px;
   border-radius: 10px;
   background: #ffffff;
   border: none;
@@ -78,12 +78,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .bellButton svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   stroke: #1f2937;
 }
 
@@ -112,12 +112,13 @@
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
   cursor: pointer;
   transition: box-shadow 0.12s ease, transform 0.12s ease;
+  height: 45px;
 }
 
 .accountChip:hover {
@@ -131,8 +132,8 @@
 }
 
 .accountAvatar {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
   overflow: hidden;
   background: #f1f5f9;
@@ -158,6 +159,9 @@
   color: #0f172a;
   font-size: 14px;
   letter-spacing: 0.01em;
+  word-break: break-all;
+  display: inline-flex;
+  gap: 6px;
 }
 
 .connectButton {
@@ -190,5 +194,44 @@
 
   .header {
     gap: 14px;
+  }
+
+  .accountAddress {
+    max-width: 42vw;
+  }
+}
+
+.accountFull {
+  display: none;
+}
+
+.accountShort {
+  display: inline;
+}
+
+@media (max-width: 530px) {
+  .header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .searchWrapper {
+    order: 2;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .rightSection {
+    order: 1;
+    width: auto;
+    justify-content: flex-start;
+    margin-left: auto;
+    gap: 10px;
+  }
+
+  .bellButton {
+    margin-right: 0;
   }
 }

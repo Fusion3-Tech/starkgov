@@ -12,24 +12,39 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuClick }: HeaderProps) {
-  const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
-    useStarknetWallet();
+  const {
+    wallet,
+    accounts,
+    connecting,
+    connectWallet,
+    availableWallets,
+    disconnectWallet,
+  } = useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
   const primaryAccount = accounts[0];
 
-  const formattedAccount = useMemo(() => {
+  const shortAccount = useMemo(() => {
     if (!primaryAccount) return "";
-    return `${primaryAccount.slice(0, 6)}...${primaryAccount.slice(-4)}`;
+    if (primaryAccount.length <= 10) return primaryAccount;
+    return `${primaryAccount.slice(0, 10)}...${primaryAccount.slice(-10)}`;
   }, [primaryAccount]);
 
-  const accountIcon = useMemo(() => getBlockieDataUrl(primaryAccount), [primaryAccount]);
+  const accountIcon = useMemo(
+    () => getBlockieDataUrl(primaryAccount),
+    [primaryAccount]
+  );
 
   return (
     <header className={styles.header}>
       {onMenuClick ? (
-        <button type="button" className={styles.menuButton} onClick={onMenuClick} aria-label="Open menu">
+        <button
+          type="button"
+          className={styles.menuButton}
+          onClick={onMenuClick}
+          aria-label="Open menu"
+        >
           ☰
         </button>
       ) : null}
@@ -77,14 +92,17 @@ export default function Header({ onMenuClick }: HeaderProps) {
             className={styles.accountChip}
             type="button"
             onClick={() => setShowWalletModal(true)}
-            aria-label={`Connected account ${formattedAccount}`}
+            aria-label={`Connected account ${primaryAccount}`}
           >
-            <span className={styles.accountAddress}>{formattedAccount}</span>
+            <span className={styles.accountAddress}>
+              <span className={styles.accountFull}>{primaryAccount}</span>
+              <span className={styles.accountShort}>{shortAccount}</span>
+            </span>
             <span className={styles.accountAvatar}>
               {accountIcon ? (
                 <img src={accountIcon} alt="" aria-hidden="true" />
               ) : (
-                <span className={styles.accountInitials}>{formattedAccount}</span>
+                <span className={styles.accountInitials}>{shortAccount}</span>
               )}
             </span>
           </button>
@@ -95,7 +113,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             onClick={() => setShowWalletModal(true)}
             disabled={connecting}
           >
-            {connecting ? 'Connecting...' : 'Connect Wallet'}
+            {connecting ? "Connecting..." : "Connect Wallet"}
           </button>
         )}
       </div>
