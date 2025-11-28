@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import styles from './ProposalPage.module.scss';
 import dashboardStyles from '../../Dashboard.module.scss';
@@ -10,6 +10,7 @@ import { getBlockieDataUrl } from '@/lib/blockies';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import ProposalSummaryGauge from '@/components/ProposalSummaryGauge';
 import { formatCompactNumber } from '@/lib/format';
 
@@ -34,6 +35,7 @@ const ProposalPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { data, loading, error, refetch } = useProposals();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const proposal = useMemo(() => {
     if (!Array.isArray(data)) return null;
@@ -50,13 +52,17 @@ const ProposalPage: React.FC = () => {
   };
 
   const authorBlockie = getBlockieDataUrl(proposal?.author || proposal?.id);
+  const markdownComponents: Components = {
+    img: ({ node, src, alt, ...props }) =>
+      src ? <img src={src} alt={alt ?? ''} {...props} /> : null,
+  };
 
   return (
     <div className={dashboardStyles.shell}>
-      <Sidebar />
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className={dashboardStyles.main}>
-        <Header />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
 
         <section className={styles.page}>
           <header className={styles.header}>
@@ -102,7 +108,7 @@ const ProposalPage: React.FC = () => {
 
                 <article className={styles.body}>
                   {proposal.body ? (
-                    <ReactMarkdown>{proposal.body}</ReactMarkdown>
+                    <ReactMarkdown components={markdownComponents}>{proposal.body}</ReactMarkdown>
                   ) : (
                     'No description provided.'
                   )}

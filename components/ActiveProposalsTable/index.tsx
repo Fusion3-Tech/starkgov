@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
-import styles from './ActiveProposalsTable.module.scss';
-import { useProposals } from '@/hooks/useProposals';
-import { TransformedProposal } from '@/hooks/helpers';
-import { getBlockieDataUrl } from '@/lib/blockies';
-import { formatCompactNumber } from '@/lib/format';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useMemo, useState } from "react";
+import styles from "./ActiveProposalsTable.module.scss";
+import { useProposals } from "@/hooks/useProposals";
+import { TransformedProposal } from "@/hooks/helpers";
+import { getBlockieDataUrl } from "@/lib/blockies";
+import { formatCompactNumber } from "@/lib/format";
+import { useRouter } from "next/navigation";
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
@@ -14,15 +14,15 @@ interface ActiveProposalsTableProps {
 
 const formatDate = (timestamp?: number) =>
   timestamp
-    ? new Date(timestamp * 1000).toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric',
+    ? new Date(timestamp * 1000).toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
       })
-    : '—';
+    : "—";
 
 const formatAccount = (account?: string) => {
-  if (!account) return '—';
+  if (!account) return "—";
   if (account.length <= 8) return account;
   return `${account.slice(0, 4)}...${account.slice(-4)}`;
 };
@@ -40,8 +40,8 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
     return [];
   }, [data, proposalsFromProps]);
 
-  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
-  const [search, setSearch] = useState('');
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [search, setSearch] = useState("");
 
   const filteredProposals = useMemo(() => {
     const term = search.toLowerCase().trim();
@@ -56,7 +56,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
     });
 
     return items.sort((a, b) =>
-      sortOrder === 'newest'
+      sortOrder === "newest"
         ? (b.created || 0) - (a.created || 0)
         : (a.created || 0) - (b.created || 0)
     );
@@ -66,7 +66,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
     return (
       <section className={styles.card}>
         <header className={styles.header}>
-          <h2 className={styles.title}>Active Proposals</h2>
+          <h2 className={styles.title}>Recent Proposals</h2>
         </header>
         <div className={styles.emptyState}>Unable to load proposals.</div>
       </section>
@@ -76,7 +76,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   return (
     <section className={styles.card}>
       <header className={styles.header}>
-        <h2 className={styles.title}>Active Proposals</h2>
+        <h2 className={styles.title}>Recent Proposals</h2>
 
         <div className={styles.headerControls}>
           <div className={styles.sortWrapper}>
@@ -85,10 +85,12 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
               type="button"
               className={styles.sortButton}
               onClick={() =>
-                setSortOrder((prev) => (prev === 'newest' ? 'oldest' : 'newest'))
+                setSortOrder((prev) =>
+                  prev === "newest" ? "oldest" : "newest"
+                )
               }
             >
-              {sortOrder === 'newest' ? 'Newest' : 'Oldest'}
+              {sortOrder === "newest" ? "Newest" : "Oldest"}
               <span className={styles.sortChevron}>▾</span>
             </button>
           </div>
@@ -136,7 +138,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
               tabIndex={0}
               onClick={() => router.push(`/proposals/${p.id}`)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   router.push(`/proposals/${p.id}`);
                 }
@@ -201,9 +203,9 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
               <div className={styles.categoryCell}>
                 <span
                   className={`${styles.categoryBadge} ${
-                    p.state === 'executed'
+                    p.state === "executed"
                       ? styles.categoryProtocol
-                      : p.state === 'active'
+                      : p.state === "active"
                       ? styles.categorySecurity
                       : styles.categoryOther
                   }`}

@@ -1,20 +1,54 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styles from './Header.module.scss';
-import { useStarknetWallet } from '@/hooks/useStarknetWallet';
-import WalletModal from '../WalletModal';
-import ProposalSearchModal from '../ProposalSearchModal';
+import { useMemo, useState } from "react";
+import styles from "./Header.module.scss";
+import { useStarknetWallet } from "@/hooks/useStarknetWallet";
+import WalletModal from "../WalletModal";
+import ProposalSearchModal from "../ProposalSearchModal";
+import { getBlockieDataUrl } from "@/lib/blockies";
 
-export default function Header() {
-  const { wallet, accounts, connecting, connectWallet, availableWallets, disconnectWallet } =
-    useStarknetWallet();
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
+  const {
+    wallet,
+    accounts,
+    connecting,
+    connectWallet,
+    availableWallets,
+    disconnectWallet,
+  } = useStarknetWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
+  const primaryAccount = accounts[0];
+
+  const shortAccount = useMemo(() => {
+    if (!primaryAccount) return "";
+    if (primaryAccount.length <= 10) return primaryAccount;
+    return `${primaryAccount.slice(0, 10)}...${primaryAccount.slice(-10)}`;
+  }, [primaryAccount]);
+
+  const accountIcon = useMemo(
+    () => getBlockieDataUrl(primaryAccount),
+    [primaryAccount]
+  );
 
   return (
     <header className={styles.header}>
+      {onMenuClick ? (
+        <button
+          type="button"
+          className={styles.menuButton}
+          onClick={onMenuClick}
+          aria-label="Open menu"
+        >
+          ☰
+        </button>
+      ) : null}
+
       {/* Search */}
       <div className={styles.searchWrapper}>
         <input
@@ -39,9 +73,6 @@ export default function Header() {
       </div>
 
       <div className={styles.rightSection}>
-        {/* Date */}
-        <div className={styles.dateBox}>15 May 2020 8:00 am</div>
-
         {/* Bell */}
         <button className={styles.bellButton}>
           <svg
@@ -58,12 +89,22 @@ export default function Header() {
         {/* Avatar / Connect */}
         {isConnected ? (
           <button
-            className={styles.avatar}
-            title={accounts[0]}
+            className={styles.accountChip}
             type="button"
             onClick={() => setShowWalletModal(true)}
+            aria-label={`Connected account ${primaryAccount}`}
           >
-            <img src="/avatar.png" alt="Wallet connected" />
+            <span className={styles.accountAddress}>
+              <span className={styles.accountFull}>{primaryAccount}</span>
+              <span className={styles.accountShort}>{shortAccount}</span>
+            </span>
+            <span className={styles.accountAvatar}>
+              {accountIcon ? (
+                <img src={accountIcon} alt="" aria-hidden="true" />
+              ) : (
+                <span className={styles.accountInitials}>{shortAccount}</span>
+              )}
+            </span>
           </button>
         ) : (
           <button
@@ -72,7 +113,7 @@ export default function Header() {
             onClick={() => setShowWalletModal(true)}
             disabled={connecting}
           >
-            {connecting ? 'Connecting...' : 'Connect Wallet'}
+            {connecting ? "Connecting..." : "Connect Wallet"}
           </button>
         )}
       </div>
