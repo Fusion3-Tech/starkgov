@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styles from './Header.module.scss';
-import { useStarknetWallet } from '@/hooks/useStarknetWallet';
-import WalletModal from '../WalletModal';
-import ProposalSearchModal from '../ProposalSearchModal';
+import { useMemo, useState } from "react";
+import styles from "./Header.module.scss";
+import { useStarknetWallet } from "@/hooks/useStarknetWallet";
+import WalletModal from "../WalletModal";
+import ProposalSearchModal from "../ProposalSearchModal";
+import { getBlockieDataUrl } from "@/lib/blockies";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -16,6 +17,14 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const isConnected = !!wallet && accounts.length > 0;
+  const primaryAccount = accounts[0];
+
+  const formattedAccount = useMemo(() => {
+    if (!primaryAccount) return "";
+    return `${primaryAccount.slice(0, 6)}...${primaryAccount.slice(-4)}`;
+  }, [primaryAccount]);
+
+  const accountIcon = useMemo(() => getBlockieDataUrl(primaryAccount), [primaryAccount]);
 
   return (
     <header className={styles.header}>
@@ -49,9 +58,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
       </div>
 
       <div className={styles.rightSection}>
-        {/* Date */}
-        <div className={styles.dateBox}>15 May 2020 8:00 am</div>
-
         {/* Bell */}
         <button className={styles.bellButton}>
           <svg
@@ -68,12 +74,19 @@ export default function Header({ onMenuClick }: HeaderProps) {
         {/* Avatar / Connect */}
         {isConnected ? (
           <button
-            className={styles.avatar}
-            title={accounts[0]}
+            className={styles.accountChip}
             type="button"
             onClick={() => setShowWalletModal(true)}
+            aria-label={`Connected account ${formattedAccount}`}
           >
-            <img src="/avatar.png" alt="Wallet connected" />
+            <span className={styles.accountAddress}>{formattedAccount}</span>
+            <span className={styles.accountAvatar}>
+              {accountIcon ? (
+                <img src={accountIcon} alt="" aria-hidden="true" />
+              ) : (
+                <span className={styles.accountInitials}>{formattedAccount}</span>
+              )}
+            </span>
           </button>
         ) : (
           <button

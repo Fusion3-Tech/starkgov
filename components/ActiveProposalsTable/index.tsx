@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
-import styles from './ActiveProposalsTable.module.scss';
-import { useProposals } from '@/hooks/useProposals';
-import { TransformedProposal } from '@/hooks/helpers';
-import { getBlockieDataUrl } from '@/lib/blockies';
-import { formatCompactNumber } from '@/lib/format';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useMemo, useState } from "react";
+import styles from "./ActiveProposalsTable.module.scss";
+import { useProposals } from "@/hooks/useProposals";
+import { TransformedProposal } from "@/hooks/helpers";
+import { getBlockieDataUrl } from "@/lib/blockies";
+import { formatCompactNumber } from "@/lib/format";
+import { useRouter } from "next/navigation";
 
 interface ActiveProposalsTableProps {
   proposals?: TransformedProposal[];
@@ -66,7 +66,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
     return (
       <section className={styles.card}>
         <header className={styles.header}>
-          <h2 className={styles.title}>Active Proposals</h2>
+          <h2 className={styles.title}>Recent Proposals</h2>
         </header>
         <div className={styles.emptyState}>Unable to load proposals.</div>
       </section>
@@ -76,7 +76,7 @@ const ActiveProposalsTable: React.FC<ActiveProposalsTableProps> = ({
   return (
     <section className={styles.card}>
       <header className={styles.header}>
-        <h2 className={styles.title}>Active Proposals</h2>
+        <h2 className={styles.title}>Recent Proposals</h2>
 
         <div className={styles.headerControls}>
           <div className={styles.sortWrapper}>
