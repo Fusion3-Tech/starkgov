@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import styles from './ProposalPage.module.scss';
 import dashboardStyles from '../../Dashboard.module.scss';
 import { useProposals } from '@/hooks/useProposals';
-import type { TransformedProposal } from '@/hooks/helpers';
 import { getBlockieDataUrl } from '@/lib/blockies';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
@@ -13,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import ProposalSummaryGauge from '@/components/ProposalSummaryGauge';
 import { formatCompactNumber } from '@/lib/format';
+import ProposalVotesBubbles from '@/components/ProposalVotesBubbles';
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -151,6 +151,10 @@ const ProposalPage: React.FC = () => {
                       </li>
                     ))}
                   </ul>
+                </div>
+
+                <div className={styles.card}>
+                  <ProposalVotesBubbles proposalId={proposal.id} />
                 </div>
               </aside>
             </div>
