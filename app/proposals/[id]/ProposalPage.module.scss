@@ -3,6 +3,9 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .header {
@@ -76,6 +79,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .title {
@@ -208,6 +212,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .commentsHeader {
@@ -302,6 +308,8 @@
   border-radius: 12px;
   padding: 10px 12px;
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.03);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .commentHeader {
@@ -340,6 +348,8 @@
   color: #1f2937;
   line-height: 1.55;
   white-space: pre-line;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .commentActions {
@@ -594,7 +604,25 @@
 }
 
 @media (max-width: 720px) {
+  .page {
+    padding: 12px 12px 18px;
+  }
+
   .sidebar {
     flex-direction: column;
+  }
+
+  .commentsSection {
+    padding: 12px;
+  }
+
+  .commentItem {
+    grid-template-columns: 36px 1fr;
+    gap: 8px;
+  }
+
+  .commentAvatar {
+    width: 32px;
+    height: 32px;
   }
 }
