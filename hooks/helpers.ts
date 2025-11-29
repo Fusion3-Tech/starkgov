@@ -21,6 +21,11 @@ export interface SnapshotProposal {
   proposal_id: string;
   min_end?: number;
   max_end: number;
+  execution_strategy?: string;
+  execution_destination?: string;
+  execution_strategy_type?: string;
+  execution_time?: number;
+  execution_tx?: string;
   scores_total?: bigint | number | string;
   scores_1?: bigint | number | string; // aye
   scores_2?: bigint | number | string; // nay
