@@ -11,7 +11,10 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
-import { formatCompactNumber } from "@/lib/format";
+import ProposalTimeline from "@/components/ProposalTimeline";
+import ProposalQuorum from "@/components/ProposalQuorum";
+import ProposalExecutionInfo from "@/components/ProposalExecutionInfo";
+import ProposalChoices from "@/components/ProposalChoices";
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -148,61 +151,29 @@ const ProposalPage: React.FC = () => {
 
               <aside className={styles.sidebar}>
                 <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>Choices</h3>
-                  <ul className={styles.choiceList}>
-                    {(proposal.choices || []).map((choice, idx) => {
-                      const normalizedChoice = choice.toLowerCase();
-                      const choiceTone =
-                        normalizedChoice.includes("for") ||
-                        normalizedChoice.includes("yes")
-                          ? "for"
-                          : normalizedChoice.includes("against") ||
-                            normalizedChoice.includes("no")
-                          ? "against"
-                          : "neutral";
+                  <ProposalTimeline start={proposal.start} end={proposal.end} />
+                </div>
 
-                      return (
-                        <li
-                          key={choice}
-                          className={`${styles.choiceRow} ${
-                            styles[`choice-${choiceTone}`]
-                          }`}
-                        >
-                          <div className={styles.choiceHeader}>
-                            <span className={styles.choiceName}>{choice}</span>
-                            <div className={styles.choiceMeta}>
-                              <span className={styles.choiceValue}>
-                                {formatCompactNumber(scores[idx] || 0)}
-                              </span>
-                              <span className={styles.choicePercent}>
-                                {totalVotes > 0
-                                  ? `${Math.round(
-                                      ((scores[idx] || 0) / totalVotes) * 100
-                                    )}%`
-                                  : "0%"}
-                              </span>
-                            </div>
-                          </div>
-                          <div className={styles.choiceBar}>
-                            <span
-                              className={styles.choiceBarFill}
-                              style={{
-                                width: totalVotes
-                                  ? `${Math.max(
-                                      4,
-                                      Math.min(
-                                        100,
-                                        ((scores[idx] || 0) / totalVotes) * 100
-                                      )
-                                    )}%`
-                                  : "4%",
-                              }}
-                            />
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                <div className={styles.card}>
+                  <ProposalQuorum quorum={proposal.quorum} scoresTotal={proposal.scores_total} />
+                </div>
+
+                <ProposalChoices
+                  choices={proposal.choices || []}
+                  scores={(proposal.scores || []).map((s) => Number(s) || 0)}
+                  totalVotes={totalVotes}
+                />
+
+                <div className={styles.card}>
+                  <ProposalExecutionInfo
+                    executed={proposal.executed}
+                    executedAt={proposal.execution_time}
+                    executionData={proposal.execution_strategy}
+                    strategy={proposal.execution_strategy}
+                    strategyType={proposal.execution_strategy_type}
+                    destination={proposal.execution_destination}
+                    txHash={proposal.execution_tx}
+                  />
                 </div>
               </aside>
             </div>
