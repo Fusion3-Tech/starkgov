@@ -15,6 +15,7 @@ import ProposalTimeline from "@/components/ProposalTimeline";
 import ProposalQuorum from "@/components/ProposalQuorum";
 import ProposalExecutionInfo from "@/components/ProposalExecutionInfo";
 import ProposalChoices from "@/components/ProposalChoices";
+import DiscussionSection from "./Discussion";
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -147,6 +148,11 @@ const ProposalPage: React.FC = () => {
                     "No description provided."
                   )}
                 </article>
+
+                <DiscussionSection
+                  proposalId={proposal?.id}
+                  proposalState={proposal.state}
+                />
               </div>
 
               <aside className={styles.sidebar}>
