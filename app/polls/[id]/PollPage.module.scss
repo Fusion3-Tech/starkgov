@@ -83,7 +83,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .authorBlock {
@@ -132,14 +132,20 @@
 .metaValue {
   font-size: 14px;
   color: #0f172a;
-  font-weight: 600;
+  font-weight: 500;
+}
+
+.metaValueStrong {
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 700;
 }
 
 .badge {
   padding: 6px 12px;
   border-radius: 12px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   background: #dff7e9;
   color: #0f9c52;
   text-transform: capitalize;
@@ -171,6 +177,36 @@
   gap: 10px;
 }
 
+.quorumSection {
+  margin-top: 4px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .choiceRow {
   display: flex;
   justify-content: space-between;
@@ -179,6 +215,12 @@
   border-radius: 12px;
   padding: 12px 14px;
   background: #f9fafb;
+}
+
+.choiceText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .choiceLabel {
@@ -192,8 +234,39 @@
   color: #6b7280;
 }
 
+.choiceValue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+}
+
+.choiceScore {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 60px;
+}
+
+.choiceBar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.choiceBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
 @media (max-width: 720px) {
   .page {
     padding: 12px 12px 18px;
+  }
+
+  .metaRow {
+    flex-wrap: wrap;
   }
 }

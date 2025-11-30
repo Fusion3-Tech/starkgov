@@ -11,6 +11,9 @@ import type { PollSimple } from "@/hooks/usePolls";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { getBlockieDataUrl } from "@/lib/blockies";
+import { formatCompactNumber } from "@/lib/format";
+import ProposalQuorum from "@/components/ProposalQuorum";
+import ProposalTimeline from "@/components/ProposalTimeline";
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -34,6 +37,8 @@ const PollPage: React.FC = () => {
   const markdownComponents: Components = {
     img: ({ src, alt }) => (src ? <img src={src} alt={alt ?? ""} /> : null),
   };
+
+  const totalScore = poll?.scores?.reduce((sum, val) => sum + (val || 0), 0) || 0;
 
   return (
     <div className={dashboardStyles.shell}>
@@ -71,7 +76,9 @@ const PollPage: React.FC = () => {
             <div className={styles.status}>Poll not found.</div>
           ) : null}
 
-              {poll ? (
+          {poll ? (
+            <div className={styles.contentGrid}>
+              <div className={styles.mainColumn}>
                 <div className={styles.content}>
                   <h1 className={styles.title}>{poll.title || poll.id}</h1>
 
@@ -96,39 +103,69 @@ const PollPage: React.FC = () => {
                       </div>
                     </div>
                     <div className={styles.metaItem}>
-                      <span className={styles.metaLabel}>Start</span>
-                      <span className={styles.metaValue}>{formatDate(poll.start)}</span>
+                      <span className={styles.metaLabel}>Created</span>
+                      <span className={styles.metaValueStrong}>
+                        {formatDate(poll.start)}
+                      </span>
                     </div>
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>End</span>
-                  <span className={styles.metaValue}>{formatDate(poll.end)}</span>
-                </div>
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>State</span>
-                  <span className={styles.badge}>{poll.state || "unknown"}</span>
+                    <div className={styles.metaItem}>
+                      <span className={styles.metaLabel}>State</span>
+                      <span className={styles.badge}>
+                        {poll.state || "unknown"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <article className={styles.body}>
+                    {poll.body ? (
+                      <ReactMarkdown components={markdownComponents}>
+                        {poll.body}
+                      </ReactMarkdown>
+                    ) : (
+                      "No description provided."
+                    )}
+                  </article>
+
+                  {poll.choices && poll.choices.length ? (
+                    <div className={styles.choices}>
+                      {poll.choices.map((choice, idx) => (
+                        <div key={idx} className={styles.choiceRow}>
+                          <div className={styles.choiceText}>
+                            <span className={styles.choiceLabel}>{choice}</span>
+                            <span className={styles.choiceIndex}>#{idx + 1}</span>
+                          </div>
+                          <div className={styles.choiceValue}>
+                            <span className={styles.choiceScore}>
+                              {poll.scores?.[idx] !== undefined
+                                ? formatCompactNumber(poll.scores[idx])
+                                : "—"}
+                            </span>
+                            <div className={styles.choiceBar}>
+                              <div
+                                className={styles.choiceBarFill}
+                                style={{
+                                  width: `${
+                                    totalScore > 0 && poll.scores?.[idx]
+                                      ? Math.min(
+                                          100,
+                                          (poll.scores[idx] / totalScore) * 100,
+                                        )
+                                      : 0
+                                  }%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </div>
-
-              <article className={styles.body}>
-                {poll.body ? (
-                  <ReactMarkdown components={markdownComponents}>
-                    {poll.body}
-                  </ReactMarkdown>
-                ) : (
-                  "No description provided."
-                )}
-              </article>
-
-              {poll.choices && poll.choices.length ? (
-                <div className={styles.choices}>
-                  {poll.choices.map((choice, idx) => (
-                    <div key={idx} className={styles.choiceRow}>
-                      <span className={styles.choiceLabel}>{choice}</span>
-                      <span className={styles.choiceIndex}>#{idx + 1}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
+              <aside className={styles.sidebar}>
+                <ProposalTimeline start={poll.start} end={poll.end} />
+                <ProposalQuorum quorum={poll.quorum} scoresTotal={totalScore} />
+              </aside>
             </div>
           ) : null}
         </section>

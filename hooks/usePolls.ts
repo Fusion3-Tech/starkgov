@@ -8,6 +8,10 @@ export interface PollSimple {
   title?: string;
   body?: string;
   choices?: string[];
+  votes?: number;
+  scores?: number[];
+  quorum?: number;
+  quorumType?: string;
   start?: number;
   end?: number;
   snapshot?: string;
@@ -41,6 +45,9 @@ const POLLS_QUERY = `
       title
       body
       choices
+      votes
+      scores
+      quorum
       start
       end
       snapshot
