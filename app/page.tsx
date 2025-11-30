@@ -11,7 +11,7 @@ import ParticipationRateCard from '@/components/ParticipationRateCard';
 import DelegatesCountCard from '@/components/DelegatesCountCard';
 import RecentlyPassedCard from '@/components/RecentlyPassedCard';
 import RecentlyRejectedCard from '@/components/RecentlyRejectedCard';
-import ActiveProposalsTable from '@/components/ActiveProposalsTable';
+import ProposalsPollsTable from '@/components/ProposalsPollsTable';
 
 export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -40,7 +40,7 @@ export default function DashboardPage() {
 
           {/* Row 2 */}
           <div className={styles.activeProposalsArea}>
-            <ActiveProposalsTable title="Recent Proposals" />
+            <ProposalsPollsTable />
           </div>
 
           <div className={styles.recentArea}>
