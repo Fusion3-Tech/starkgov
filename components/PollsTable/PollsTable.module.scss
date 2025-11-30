@@ -4,8 +4,6 @@
   padding: 24px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
   border: 1px solid #eef0f5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    sans-serif;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -16,20 +14,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 16px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0f172a;
+  margin-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .headerControls {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .sortWrapper {
@@ -103,29 +97,44 @@
   fill: none;
 }
 
-/* TABLE FILLS CARD + SCROLLABLE BODY */
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.refresh {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  font-size: 13px;
+  background: #f9fafb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* table layout similar to proposals */
 .table {
   width: 100%;
-  margin-top: 8px;
-
+  margin-top: 4px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0; /* allow the table body to scroll within the card */
+  min-height: 0;
 }
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 3fr 1.4fr;
+  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 1.4fr;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
   color: #9ca3af;
   padding: 8px 8px 8px 0;
   border-bottom: 1px solid #e5e7eb;
-
-  /* keep header visible while scrolling */
-  flex: 0 0 auto;
   position: sticky;
   top: 0;
   background: #ffffff;
@@ -136,39 +145,23 @@
   margin-top: 4px;
   flex: 1 1 auto;
   min-height: 0;
-
-  /* scroll only inside proposals list */
   overflow-y: auto;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 3fr 1.4fr;
+  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 1.4fr;
   align-items: center;
   padding: 14px 8px 14px 0;
   column-gap: 8px;
   border-bottom: 1px solid #f1f5f9;
 }
 
-.rowLink {
-  text-decoration: none;
-  color: inherit;
-  display: grid;
-  grid-template-columns: 2.4fr 2.1fr 1.4fr 1.2fr 3fr 1.4fr;
-  align-items: center;
-  padding: 14px 8px 14px 0;
-  column-gap: 8px;
-  border-bottom: 1px solid #f1f5f9;
-  cursor: pointer;
-}
-
-.row:last-of-type,
-.rowLink:last-of-type {
+.row:last-of-type {
   border-bottom: none;
 }
 
-.row:hover,
-.rowLink:hover {
+.row:hover {
   background: #f9fafb;
 }
 
@@ -205,6 +198,7 @@
 .accountText {
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 
 .accountName {
@@ -214,90 +208,53 @@
 }
 
 .titleCell,
-.createdCell,
-.commentsCell,
-.progressCell,
-.categoryCell {
+.dateCell,
+.stateCell {
   font-size: 13px;
   color: #111827;
 }
 
 .titleCell {
   font-weight: 500;
+  font-size: 13px;
+  color: #111827;
+  word-break: break-word;
 }
 
-.createdCell,
-.commentsCell {
+.dateCell {
   color: #4b5563;
+  font-weight: 500;
 }
 
-.progressCell {
-  padding-right: 12px;
-}
-
-.progressBar {
-  width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: #e5e7eb;
-  overflow: hidden;
-  display: flex;
-}
-
-.progressYes {
-  background: #22c55e;
-}
-
-.progressNo {
-  background: #ef4444;
-}
-
-.categoryCell {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.categoryBadge {
-  padding: 6px 10px;
+.stateBadge {
   border-radius: 10px;
+  padding: 6px 10px;
   font-size: 11px;
   font-weight: 500;
-  color: #374151;
+  text-transform: capitalize;
   background: #f3f4f6;
+  color: #374151;
+  justify-self: flex-start;
 }
 
-.emptyState {
+.empty {
   padding: 20px 0;
   text-align: center;
   font-size: 13px;
   color: #6b7280;
 }
 
-/* basic responsiveness */
 @media (max-width: 900px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .headerControls {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 768px) {
   .tableHeader {
     display: none;
-    position: static;
   }
 
-  .table {
-    max-height: 420px; /* still fixed-height area on mobile */
-  }
-
-  .row,
-  .rowLink {
+  .row {
     grid-template-columns: 1.8fr 1.2fr 1fr;
     grid-template-rows: auto auto;
     row-gap: 8px;
@@ -306,11 +263,16 @@
   .titleCell {
     grid-column: 1 / -1;
   }
+}
 
-  .createdCell,
-  .commentsCell,
-  .progressCell,
-  .categoryCell {
-    font-size: 12px;
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 6px;
   }
 }
