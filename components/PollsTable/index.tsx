@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./PollsTable.module.scss";
 import { usePolls, type PollSimple } from "@/hooks/usePolls";
 import { getBlockieDataUrl } from "@/lib/blockies";
+import { useRouter } from "next/navigation";
 
 interface PollsTableProps {
   polls?: PollSimple[];
@@ -50,6 +51,8 @@ const PollsTable: React.FC<PollsTableProps> = ({
         : (a.start || 0) - (b.start || 0),
     );
   }, [polls, pollsFromProps, search, sortOrder]);
+
+  const router = useRouter();
 
   return (
     <section className={styles.card}>
@@ -112,7 +115,19 @@ const PollsTable: React.FC<PollsTableProps> = ({
             <div className={styles.empty}>No polls found.</div>
           ) : (
             list.map((poll) => (
-              <div key={poll.id} className={styles.row}>
+              <div
+                key={poll.id}
+                className={styles.row}
+                role="link"
+                tabIndex={0}
+                onClick={() => router.push(`/polls/${poll.id}`)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    router.push(`/polls/${poll.id}`);
+                  }
+                }}
+              >
                 <div className={styles.accountCell}>
                   <div className={styles.avatar}>
                     {(() => {
