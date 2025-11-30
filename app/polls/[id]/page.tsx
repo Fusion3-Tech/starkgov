@@ -10,6 +10,7 @@ import { usePolls } from "@/hooks/usePolls";
 import type { PollSimple } from "@/hooks/usePolls";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
+import { getBlockieDataUrl } from "@/lib/blockies";
 
 const formatDate = (timestamp?: number) =>
   timestamp
@@ -70,19 +71,34 @@ const PollPage: React.FC = () => {
             <div className={styles.status}>Poll not found.</div>
           ) : null}
 
-          {poll ? (
-            <div className={styles.content}>
-              <h1 className={styles.title}>{poll.title || poll.id}</h1>
+              {poll ? (
+                <div className={styles.content}>
+                  <h1 className={styles.title}>{poll.title || poll.id}</h1>
 
-              <div className={styles.metaRow}>
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Author</span>
-                  <span className={styles.metaValue}>{poll.author}</span>
-                </div>
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Start</span>
-                  <span className={styles.metaValue}>{formatDate(poll.start)}</span>
-                </div>
+                  <div className={styles.metaRow}>
+                    <div className={styles.authorBlock}>
+                      <div className={styles.avatar}>
+                        {(() => {
+                          const blockie = getBlockieDataUrl(poll.author);
+                          if (blockie) {
+                            return <img src={blockie} alt={poll.author} />;
+                          }
+                          return (
+                            <span className={styles.avatarFallback}>
+                              {poll.author?.slice(0, 6) || "??"}
+                            </span>
+                          );
+                        })()}
+                      </div>
+                      <div className={styles.metaItem}>
+                        <span className={styles.metaLabel}>Author</span>
+                        <span className={styles.metaValue}>{poll.author}</span>
+                      </div>
+                    </div>
+                    <div className={styles.metaItem}>
+                      <span className={styles.metaLabel}>Start</span>
+                      <span className={styles.metaValue}>{formatDate(poll.start)}</span>
+                    </div>
                 <div className={styles.metaItem}>
                   <span className={styles.metaLabel}>End</span>
                   <span className={styles.metaValue}>{formatDate(poll.end)}</span>
