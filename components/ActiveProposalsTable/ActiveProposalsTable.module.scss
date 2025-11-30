@@ -258,23 +258,12 @@
 }
 
 .categoryBadge {
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 6px 10px;
+  border-radius: 10px;
   font-size: 11px;
   font-weight: 500;
-  color: #ffffff;
-}
-
-.categoryProtocol {
-  background: #1d4ed8;
-}
-
-.categorySecurity {
-  background: #3b82f6;
-}
-
-.categoryOther {
-  background: #6b7280;
+  color: #374151;
+  background: #f3f4f6;
 }
 
 .emptyState {
