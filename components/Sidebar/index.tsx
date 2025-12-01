@@ -63,9 +63,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
     items.map((item) => (
       <button
         key={item.key}
-        className={`${styles.navItem} ${activeKey === item.key ? styles.navItemActive : ""} ${
-          item.disabled ? styles.navItemDisabled : ""
-        }`}
+        className={`${styles.navItem} ${
+          activeKey === item.key ? styles.navItemActive : ""
+        } ${item.disabled ? styles.navItemDisabled : ""}`}
         onClick={() => handleClick(item)}
         disabled={item.disabled}
       >
@@ -82,14 +82,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
   return (
     <div className={styles.sidebarContainer}>
       <aside
-        className={`${styles.sidebar} ${isMobileOpen ? styles.sidebarOpen : ""}`}
+        className={`${styles.sidebar} ${
+          isMobileOpen ? styles.sidebarOpen : ""
+        }`}
         aria-hidden={
-          !isMobileOpen && typeof window !== "undefined" && window.innerWidth < 1200
+          !isMobileOpen &&
+          typeof window !== "undefined" &&
+          window.innerWidth < 1200
         }
       >
         <div className={styles.brand}>
-          <img src="/starknet-logo.svg" alt="Starknet" className={styles.brandLogo} />
-          <span>StarkGov</span>
+          <span className={styles.brandMark} aria-hidden="true">
+            <img src="/logoStarkGov.svg" alt="" />
+          </span>
+          <span className={styles.brandText}>StarkGov</span>
         </div>
 
         {onClose ? (
@@ -99,7 +105,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
             onClick={onClose}
             aria-label="Close menu"
           >
-            <img src="/close.png" alt="Close menu" className={styles.closeIcon} />
+            <img
+              src="/close.png"
+              alt="Close menu"
+              className={styles.closeIcon}
+            />
           </button>
         ) : null}
 
@@ -114,7 +124,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
       {onClose ? (
         <button
           type="button"
-          className={`${styles.backdrop} ${isMobileOpen ? styles.backdropVisible : ""}`}
+          className={`${styles.backdrop} ${
+            isMobileOpen ? styles.backdropVisible : ""
+          }`}
           aria-label="Close menu overlay"
           onClick={onClose}
         />

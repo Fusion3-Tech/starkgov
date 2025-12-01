@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./PollsTable.module.scss";
 import { usePolls, type PollSimple } from "@/hooks/usePolls";
 import { getBlockieDataUrl } from "@/lib/blockies";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 interface PollsTableProps {
   polls?: PollSimple[];
   title?: string;
+  showFavoritesOnly?: boolean;
 }
 
 const formatDate = (timestamp?: number) =>
@@ -29,15 +30,59 @@ const formatAccount = (account?: string) => {
 const PollsTable: React.FC<PollsTableProps> = ({
   polls: pollsFromProps,
   title = "Snapshot Polls",
+  showFavoritesOnly = false,
 }) => {
   const { polls, loading, error } = usePolls();
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [search, setSearch] = useState("");
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const favoritesKey = "favoritePolls";
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const keysToCheck = [favoritesKey, "favoritePolls:local"];
+
+    const loadFromStorage = (key: string) => {
+      const saved = window.localStorage.getItem(key);
+      if (!saved) return null;
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((id) => typeof id === "string");
+      }
+      return null;
+    };
+
+    try {
+      let found: string[] | null = null;
+      for (const key of keysToCheck) {
+        const data = loadFromStorage(key);
+        if (data && data.length) {
+          found = data;
+          break;
+        }
+      }
+      setFavorites(found ?? []);
+    } catch {
+      setFavorites([]);
+    }
+  }, [favoritesKey]);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => {
+      const exists = prev.includes(id);
+      const next = exists ? prev.filter((f) => f !== id) : [...prev, id];
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(favoritesKey, JSON.stringify(next));
+      }
+      return next;
+    });
+  };
 
   const list = useMemo<PollSimple[]>(() => {
     const base = pollsFromProps ?? polls ?? [];
     const term = search.toLowerCase().trim();
     const filtered = base.filter((p) => {
+      if (showFavoritesOnly && !favorites.includes(p.id)) return false;
       if (!term) return true;
       return (
         (p.title || "").toLowerCase().includes(term) ||
@@ -50,7 +95,7 @@ const PollsTable: React.FC<PollsTableProps> = ({
         ? (b.start || 0) - (a.start || 0)
         : (a.start || 0) - (b.start || 0),
     ).slice(0, 10);
-  }, [polls, pollsFromProps, search, sortOrder]);
+  }, [favorites, polls, pollsFromProps, search, showFavoritesOnly, sortOrder]);
 
   const router = useRouter();
 
@@ -108,6 +153,7 @@ const PollsTable: React.FC<PollsTableProps> = ({
           <span>Start</span>
           <span>End</span>
           <span>Status</span>
+          <span className={styles.favHeader}>Favorites</span>
         </div>
 
         <div className={styles.tableBody}>
@@ -154,6 +200,29 @@ const PollsTable: React.FC<PollsTableProps> = ({
                 <div className={styles.dateCell}>{formatDate(poll.end)}</div>
                 <div className={styles.stateCell}>
                   <span className={styles.stateBadge}>{poll.state || "—"}</span>
+                </div>
+                <div className={styles.favCell}>
+                  <button
+                    type="button"
+                    className={`${styles.favButton} ${
+                      favorites.includes(poll.id) ? styles.favActive : ""
+                    }`}
+                    aria-pressed={favorites.includes(poll.id)}
+                    aria-label={
+                      favorites.includes(poll.id)
+                        ? "Remove poll from favorites"
+                        : "Add poll to favorites"
+                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(poll.id);
+                    }}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 21.35 10.55 20C6 15.85 3 13.04 3 9.5 3 7 5 5 7.5 5A5 5 0 0 1 12 7.09 5 5 0 0 1 16.5 5C19 5 21 7 21 9.5c0 3.54-3 6.35-7.55 10.5Z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             ))

@@ -25,6 +25,7 @@ export interface StarknetWalletConnection {
 }
 
 const STORAGE_KEY = 'starknet:lastWalletId';
+const ACCOUNT_KEY = 'starknet:lastAccount';
 const RETRY_DELAY_MS = 400;
 const MAX_RETRIES = 6;
 
@@ -44,6 +45,13 @@ const safeSetItem = (key: string, value: string) => {
   } catch {
     /* ignore */
   }
+};
+
+const broadcastAccountChange = (account: string | null) => {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('starknetAccountChange', { detail: account })
+  );
 };
 
 const safeRemoveItem = (key: string) => {
@@ -134,6 +142,14 @@ export function useStarknetWallet() {
           safeSetItem(STORAGE_KEY, target.id || target.name);
         }
 
+        if (accountsResult[0]) {
+          safeSetItem(ACCOUNT_KEY, accountsResult[0]);
+          broadcastAccountChange(accountsResult[0]);
+        } else {
+          safeRemoveItem(ACCOUNT_KEY);
+          broadcastAccountChange(null);
+        }
+
         return { wallet: target, accounts: accountsResult, chainId: currentChain };
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to connect Starknet wallet.');
@@ -149,6 +165,8 @@ export function useStarknetWallet() {
   const disconnectWallet = useCallback(() => {
     resetState();
     safeRemoveItem(STORAGE_KEY);
+    safeRemoveItem(ACCOUNT_KEY);
+    broadcastAccountChange(null);
   }, [resetState]);
 
   useEffect(() => {

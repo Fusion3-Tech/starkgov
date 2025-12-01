@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   title: "Starkgov",
   description: "StarkGov governance platform",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/logoStarkGov.svg",
+    shortcut: "/logoStarkGov.svg",
+    apple: "/logoStarkGov.svg",
   },
 };
 
