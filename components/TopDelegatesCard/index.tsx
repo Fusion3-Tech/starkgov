@@ -66,21 +66,35 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
         votingInfo?.votingPower ?? d.votingPower ?? 0
       );
 
+      const normalizeAvatar = (url?: string) => {
+        if (!url) return undefined;
+        // Handle ipfs://... URIs
+        if (url.startsWith('ipfs://')) {
+          return `https://cloudflare-ipfs.com/ipfs/${url.replace('ipfs://', '')}`;
+        }
+        // Avoid mixed-content http images on https (Vercel) by proxying through a https-friendly cdn.
+        if (url.startsWith('http://')) {
+          const stripped = url.replace(/^https?:\/\//, '');
+          return `https://images.weserv.nl/?url=${encodeURIComponent(stripped)}`;
+        }
+        return url;
+      };
+
       return {
         id: extra?.id || author?.id || address || idx,
         name: displayName,
         votes: formatVotes(votesValueRaw),
         rank: idx + 1,
         // Prefer user-provided avatars; otherwise use blockies for the address.
-        avatarUrl:
+        avatarUrl: normalizeAvatar(
           extra?.avatarUrl ||
-          extra?.avatar ||
-          extra?.profilePictureUrl ||
-          extra?.imageUrl ||
-          author?.profileImage ||
-          author?.ensAvatar ||
-          getSocialAvatar() ||
-          getBlockieDataUrl(address || extra?.id || String(idx)),
+            extra?.avatar ||
+            extra?.profilePictureUrl ||
+            extra?.imageUrl ||
+            author?.profileImage ||
+            author?.ensAvatar ||
+            getSocialAvatar()
+        ) || getBlockieDataUrl(address || extra?.id || String(idx)),
       };
     });
 

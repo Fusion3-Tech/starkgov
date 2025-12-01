@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./PollPage.module.scss";
 import dashboardStyles from "../../Dashboard.module.scss";
@@ -34,6 +34,7 @@ const PollPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { polls, loading, error, refetch } = usePolls();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const poll = useMemo<PollSimple | null>(() => {
     if (!Array.isArray(polls)) return null;
@@ -48,10 +49,10 @@ const PollPage: React.FC = () => {
 
   return (
     <div className={dashboardStyles.shell}>
-      <Sidebar isMobileOpen={false} onClose={() => undefined} />
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className={dashboardStyles.main}>
-        <Header onMenuClick={() => router.push("/")} />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
 
         <section className={styles.page}>
           <header className={styles.header}>

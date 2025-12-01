@@ -136,6 +136,7 @@
   margin-top: 4px;
   flex: 1 1 auto;
   min-height: 0;
+  padding-bottom: 20px;
 
   /* scroll only inside proposals list */
   overflow-y: auto;
@@ -292,10 +293,6 @@
     position: static;
   }
 
-  .table {
-    max-height: 420px; /* still fixed-height area on mobile */
-  }
-
   .row,
   .rowLink {
     grid-template-columns: 1.8fr 1.2fr 1fr;
@@ -312,5 +309,10 @@
   .progressCell,
   .categoryCell {
     font-size: 12px;
+  }
+
+  .tableBody {
+    overflow: visible; /* let content flow; avoid blank space on short lists */
+    padding-bottom: 28px; /* keep breathing room above card edge */
   }
 }

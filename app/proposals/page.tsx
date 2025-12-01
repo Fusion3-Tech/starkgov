@@ -1,21 +1,23 @@
 'use client';
 
-import styles from '../Dashboard.module.scss';
-import pageStyles from './ProposalsPage.module.scss';
-import Sidebar from '@/components/Sidebar';
-import Header from '@/components/Header';
-import ActiveProposalsTable from '@/components/ActiveProposalsTable';
-import { useProposals } from '@/hooks/useProposals';
+import { useState } from "react";
+import styles from "../Dashboard.module.scss";
+import pageStyles from "./ProposalsPage.module.scss";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
+import ActiveProposalsTable from "@/components/ActiveProposalsTable";
+import { useProposals } from "@/hooks/useProposals";
 
 export default function ProposalsPage() {
   const { data, error } = useProposals();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className={styles.shell}>
-      <Sidebar />
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className={styles.main}>
-        <Header />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
 
         <div className={pageStyles.content}>
           <ActiveProposalsTable

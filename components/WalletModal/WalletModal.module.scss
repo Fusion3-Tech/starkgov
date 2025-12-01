@@ -91,6 +91,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .walletIcon {
@@ -105,11 +106,19 @@
   font-size: 16px;
   overflow: hidden;
   border: 1px solid #e5e7eb;
+  flex-shrink: 0;
 }
 
 .walletName {
   font-weight: 600;
   color: #0f172a;
+}
+
+.walletInfo > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .walletIcon img {
@@ -162,4 +171,27 @@
 
 .connectButton:not(:disabled):hover {
   transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+  .modal {
+    padding: 16px;
+  }
+
+  .walletRow {
+    padding: 12px;
+  }
+
+  .walletIcon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .walletName {
+    font-size: 15px;
+  }
+
+  .walletDesc {
+    font-size: 12px;
+  }
 }
