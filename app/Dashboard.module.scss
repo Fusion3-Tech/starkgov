@@ -17,6 +17,7 @@
   flex-direction: column;
   gap: 18px;
   min-height: 0; /* allow inner grid to size itself and scroll */
+  min-width: 0; /* let content shrink on small viewports */
   overflow: visible;
   position: relative;
   scrollbar-width: none; /* Firefox */
@@ -92,18 +93,22 @@
 /* RESPONSIVE */
 @media (max-width: 1200px) {
   .shell {
-    padding: 14px 12px;
+    padding: 14px;
     flex-direction: column;
     gap: 12px;
   }
 
   .main {
     margin-left: 0; /* remove sidebar offset on mobile */
+    width: 100%;
+    min-width: 0;
   }
 
   .grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+    width: 100%;
+    min-width: 0;
   }
 
   .chartArea,
@@ -113,6 +118,7 @@
   .recentArea {
     grid-column: 1;
     grid-row: auto;
+    min-width: 0; /* prevent children from forcing horizontal overflow */
   }
 
   .statsArea {
