@@ -29,6 +29,12 @@ const formatDate = (timestamp?: number) =>
 const toPercent = (value: number, total: number) =>
   total > 0 ? Math.round((value / total) * 100) : 0;
 
+const formatAuthor = (value?: string) => {
+  if (!value) return "—";
+  if (value.length <= 12) return value;
+  return `${value.slice(0, 6)}...${value.slice(-4)}`;
+};
+
 const StateBadge: React.FC<{ state?: string }> = ({ state }) => {
   const label = state || "unknown";
   return (
@@ -122,8 +128,11 @@ const ProposalPage: React.FC = () => {
                     ) : null}
                     <div className={styles.authorText}>
                       <span className={styles.authorLabel}>Author</span>
-                      <span className={styles.authorValue}>
-                        {proposal.author}
+                      <span
+                        className={styles.authorValue}
+                        title={proposal.author || undefined}
+                      >
+                        {formatAuthor(proposal.author)}
                       </span>
                     </div>
                   </div>

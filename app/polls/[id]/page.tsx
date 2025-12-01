@@ -24,6 +24,12 @@ const formatDate = (timestamp?: number) =>
       })
     : "—";
 
+const formatAuthor = (value?: string) => {
+  if (!value) return "—";
+  if (value.length <= 12) return value;
+  return `${value.slice(0, 6)}...${value.slice(-4)}`;
+};
+
 const PollPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -99,7 +105,12 @@ const PollPage: React.FC = () => {
                       </div>
                       <div className={styles.metaItem}>
                         <span className={styles.metaLabel}>Author</span>
-                        <span className={styles.metaValue}>{poll.author}</span>
+                        <span
+                          className={styles.metaValue}
+                          title={poll.author || undefined}
+                        >
+                          {formatAuthor(poll.author)}
+                        </span>
                       </div>
                     </div>
                     <div className={styles.metaItem}>

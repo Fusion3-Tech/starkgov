@@ -30,7 +30,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const shortAccount = useMemo(() => {
     if (!primaryAccount) return "";
     if (primaryAccount.length <= 10) return primaryAccount;
-    return `${primaryAccount.slice(0, 10)}...${primaryAccount.slice(-10)}`;
+    return `${primaryAccount.slice(0, 7)}...${primaryAccount.slice(-8)}`;
   }, [primaryAccount]);
 
   useEffect(() => {

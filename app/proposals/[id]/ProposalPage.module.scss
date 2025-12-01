@@ -94,12 +94,14 @@
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .author {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .author img {
@@ -112,6 +114,7 @@
 .authorText {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .authorLabel {
@@ -124,6 +127,10 @@
 .authorValue {
   font-size: 13px;
   color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60vw;
 }
 
 .metaItem {

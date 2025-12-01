@@ -168,9 +168,12 @@
   color: #0f172a;
   font-size: 14px;
   letter-spacing: 0.01em;
-  word-break: break-all;
   display: inline-flex;
   gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .connectButton {
