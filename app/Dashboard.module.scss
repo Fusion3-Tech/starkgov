@@ -8,6 +8,7 @@
   box-sizing: border-box;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .main {
@@ -15,9 +16,8 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  height: 100vh;
   min-height: 0; /* allow inner grid to size itself and scroll */
-  overflow-y: auto;
+  overflow: visible;
   position: relative;
   scrollbar-width: none; /* Firefox */
 }
