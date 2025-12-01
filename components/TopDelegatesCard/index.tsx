@@ -68,11 +68,12 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
 
       const normalizeAvatar = (url?: string) => {
         if (!url) return undefined;
-        // Handle ipfs://... URIs
+        if (url.startsWith('data:')) return url;
+        // ipfs -> gateway
         if (url.startsWith('ipfs://')) {
           return `https://cloudflare-ipfs.com/ipfs/${url.replace('ipfs://', '')}`;
         }
-        // Avoid mixed-content http images on https (Vercel) by proxying through a https-friendly cdn.
+        // only proxy insecure http through HTTPS-friendly CDN; leave https as-is for local reliability
         if (url.startsWith('http://')) {
           const stripped = url.replace(/^https?:\/\//, '');
           return `https://images.weserv.nl/?url=${encodeURIComponent(stripped)}`;

@@ -119,6 +119,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
           <div className={styles.settingsTitle}>Other</div>
           <nav className={styles.nav}>{renderNav(settingsItems)}</nav>
         </div>
+
+        <div className={styles.reportBox}>
+          <div className={styles.reportLabel}>Report an issue</div>
+          <div className={styles.reportActions}>
+            <a href="mailto:contact@fusion3.tech" className={styles.reportLink}>
+              <span className={styles.reportIcon} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 6h16v12H4z" />
+                  <path d="m4 7 8 5 8-5" />
+                </svg>
+              </span>
+              Email
+            </a>
+            <a
+              href="https://github.com/Fusion3-Tech/starkgov"
+              target="_blank"
+              rel="noreferrer"
+              className={styles.reportLink}
+            >
+              <span className={styles.reportIcon} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.94c.57.1.78-.25.78-.56 0-.28-.01-1.03-.02-2.02-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.76 2.71 1.25 3.37.95.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.45.11-3.03 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 2.91-.39c.99 0 1.99.13 2.92.39 2.22-1.49 3.2-1.18 3.2-1.18.63 1.58.23 2.74.11 3.03.74.8 1.19 1.83 1.19 3.08 0 4.41-2.7 5.38-5.27 5.66.41.36.77 1.08.77 2.19 0 1.58-.01 2.85-.01 3.23 0 .31.21.67.79.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
+                </svg>
+              </span>
+              GitHub
+            </a>
+          </div>
+        </div>
       </aside>
 
       {onClose ? (
