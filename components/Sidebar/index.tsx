@@ -23,7 +23,6 @@ const mainItems: NavItem[] = [
 ];
 
 const settingsItems: NavItem[] = [
-  { label: "Notifications", key: "notifications", hasBadge: true, badgeCount: 8, disabled: true },
   { label: "Docs", key: "docs", disabled: true },
   { label: "Settings", key: "settings", disabled: true },
 ];
@@ -88,7 +87,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
           !isMobileOpen && typeof window !== "undefined" && window.innerWidth < 1200
         }
       >
-        <div className={styles.brand}>StarkGov</div>
+        <div className={styles.brand}>
+          <img src="/starknet-logo.svg" alt="Starknet" className={styles.brandLogo} />
+          <span>StarkGov</span>
+        </div>
 
         {onClose ? (
           <button
@@ -191,12 +193,7 @@ function renderIcon(key: string, filled: boolean) {
         </svg>
       );
     case "notifications":
-      return (
-        <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
-          <path d="M10 17a2 2 0 0 0 2-2H8a2 2 0 0 0 2 2Z" />
-          <path d="M15 7a5 5 0 1 0-10 0c0 4-1.5 5-1.5 5H16.5S15 11 15 7Z" />
-        </svg>
-      );
+      return null;
     case "docs":
       return (
         <svg viewBox="0 0 20 20" className={styles.icon} aria-hidden="true">
