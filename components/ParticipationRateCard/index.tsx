@@ -27,7 +27,7 @@ const ParticipationRateCard: React.FC = () => {
       title="Total proposals"
       value={proposalCount}
       valueSuffix=""
-      trend="neutral"
+      trend="down"
       deltaLabel={`Active: ${activeCount} • Closed: ${closedCount}`}
       description=""
     />

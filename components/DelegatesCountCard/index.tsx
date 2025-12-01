@@ -26,7 +26,7 @@ const DelegatesCountCard: React.FC = () => {
     <MetricStatCard
       title="Total polls"
       value={totalPolls}
-      trend="neutral"
+      trend="down"
       deltaLabel={`Active: ${activePolls} • Closed: ${closedPolls}`}
       description=""
     />
