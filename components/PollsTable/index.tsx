@@ -49,7 +49,7 @@ const PollsTable: React.FC<PollsTableProps> = ({
       sortOrder === "newest"
         ? (b.start || 0) - (a.start || 0)
         : (a.start || 0) - (b.start || 0),
-    );
+    ).slice(0, 10);
   }, [polls, pollsFromProps, search, sortOrder]);
 
   const router = useRouter();
