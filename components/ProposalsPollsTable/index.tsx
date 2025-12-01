@@ -38,10 +38,7 @@ const ProposalsPollsTable: React.FC = () => {
           type="button"
           className={`${styles.actionButton} ${showFavorites ? styles.actionActive : ""}`}
           aria-pressed={showFavorites}
-          onClick={() => {
-            setActiveTab("proposals");
-            setShowFavorites((prev) => !prev);
-          }}
+          onClick={() => setShowFavorites((prev) => !prev)}
         >
           <span className={styles.actionIcon} aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">

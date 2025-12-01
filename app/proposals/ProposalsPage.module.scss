@@ -9,3 +9,60 @@
   color: #b91c1c;
   font-size: 13px;
 }
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.favToggle {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f5f7fb;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease,
+    background-color 0.12s ease, color 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favToggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #111827;
+  border-color: #dfe3eb;
+}
+
+.favToggleActive {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+  border-color: #dfe3eb;
+}
+
+.favIcon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favIcon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #9ca3af;
+  stroke-width: 1.8;
+}
+
+.favToggleActive .favIcon svg {
+  fill: #f59e0b;
+  stroke: #f59e0b;
+}
