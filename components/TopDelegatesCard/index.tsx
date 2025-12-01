@@ -68,6 +68,7 @@ const TopDelegatesCard: React.FC<TopDelegatesCardProps> = ({
 
       const normalizeAvatar = (url?: string) => {
         if (!url) return undefined;
+        console.log(url);
         if (url.startsWith('data:')) return url;
         // ipfs -> gateway
         if (url.startsWith('ipfs://')) {
