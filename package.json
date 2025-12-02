@@ -13,7 +13,7 @@
     "@snapshot-labs/snapshot.js": "^0.14.17",
     "@snapshot-labs/sx": "^0.1.9",
     "@vercel/analytics": "^1.6.0",
-    "ethereum-blockies": "^0.1.1",
+    "blo": "^2.0.0",
     "graphql": "^16.12.0",
     "next": "16.0.3",
     "react": "19.2.0",
@@ -24,7 +24,6 @@
     "starknet": "^7.6.4"
   },
   "devDependencies": {
-    "@types/ethereum-blockies": "^0.1.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

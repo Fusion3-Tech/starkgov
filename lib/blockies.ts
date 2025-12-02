@@ -1,19 +1,16 @@
-import blockies from 'ethereum-blockies';
+import { blo } from 'blo';
 
 export function getBlockieDataUrl(seed?: string): string {
   const normalized = seed?.trim().toLowerCase();
   if (!normalized) return '';
 
-  try {
-    const icon = blockies.create({
-      seed: normalized,
-      size: 8,
-      scale: 8,
-    });
+  const address = (normalized.startsWith('0x') ? normalized : `0x${normalized}`) as `0x${string}`;
 
-    return icon?.toDataURL?.() ?? '';
+  try {
+    // blo returns a data URI directly
+    return blo(address, 8) || '';
   } catch (err) {
-    console.error('Blockies generation failed', err);
+    console.error('Identicon generation failed', err);
     return '';
   }
 }
