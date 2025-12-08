@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     siteName: "StarkGov",
     images: [
       {
-        url: "/logoStarkGov.svg",
+        url: "/logoStarkGov.png",
         width: 512,
         height: 512,
         alt: "StarkGov logo",
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: "/logoStarkGov.svg",
-    shortcut: "/logoStarkGov.svg",
-    apple: "/logoStarkGov.svg",
+    icon: [{ url: "/favicon.png" }, { url: "/favicon.png", type: "image/png" }],
+    apple: "/favicon.png",
+    shortcut: "/favicon.png",
   },
 };
 
