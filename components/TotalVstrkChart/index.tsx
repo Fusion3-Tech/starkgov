@@ -116,12 +116,12 @@ const TotalVstrkChart: React.FC = () => {
           >
             <defs>
               <linearGradient id="vstrkMain" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#4338CA" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="#4338CA" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="#0B4EC2" stopOpacity={0.7} />
+                <stop offset="100%" stopColor="#22D3EE" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="vstrkBg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#CBD5F5" stopOpacity={0.8} />
-                <stop offset="100%" stopColor="#CBD5F5" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="#A9C7F5" stopOpacity={0.55} />
+                <stop offset="100%" stopColor="#A9C7F5" stopOpacity={0.04} />
               </linearGradient>
             </defs>
 
@@ -153,7 +153,7 @@ const TotalVstrkChart: React.FC = () => {
             <Area
               type="monotone"
               dataKey="value"
-              stroke="#CBD5F5"
+              stroke="#B8D4FB"
               strokeWidth={2}
               fill="url(#vstrkBg)"
               activeDot={false}
@@ -163,7 +163,7 @@ const TotalVstrkChart: React.FC = () => {
             <Area
               type="monotone"
               dataKey="value"
-              stroke="#312E81"
+              stroke="#0B2F78"
               strokeWidth={3}
               fill="url(#vstrkMain)"
             />
@@ -171,7 +171,7 @@ const TotalVstrkChart: React.FC = () => {
             {selectedX ? (
               <ReferenceLine
                 x={selectedX}
-                stroke="#6366F1"
+                stroke="#22D3EE"
                 strokeDasharray="4 4"
                 strokeWidth={1}
               />

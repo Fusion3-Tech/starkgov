@@ -1,16 +1,16 @@
 .card {
-  background: #ffffff;
+  background: linear-gradient(155deg, #ffffff 0%, #f2f5ff 100%);
   border-radius: 18px;
   padding: 18px 18px 16px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-  border: 1px solid #eef0f5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  font-family: var(--font-body, system-ui, -apple-system, 'SF Pro Text', sans-serif);
 }
 
 .header {
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--muted);
   margin-bottom: 10px;
 }
 
@@ -25,13 +25,13 @@
   font-size: 32px;
   line-height: 1;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .valueSuffix {
   font-size: 18px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .deltaRow {
@@ -57,13 +57,13 @@
 }
 
 .iconUp {
-  color: #16a34a;
-  background: #dcfce7;
+  color: #0f9d58;
+  background: rgba(15, 157, 88, 0.18);
 }
 
 .iconDown {
-  color: #dc2626;
-  background: #fee2e2;
+  color: #e11d48;
+  background: rgba(225, 29, 72, 0.16);
 }
 
 .deltaLabel {
@@ -79,5 +79,5 @@
 }
 
 .description {
-  color: #6b7280;
+  color: #74809a;
 }

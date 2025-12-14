@@ -3,8 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 10px 0;
+  gap: 20px;
+  padding: 14px 16px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
 }
 
 .menuButton {
@@ -12,15 +16,16 @@
   flex-shrink: 0;
   width: 45px;
   height: 45px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  border: 1px solid var(--border);
   background: #ffffff;
   align-items: center;
   justify-content: center;
   padding: 10px;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1;
+  box-shadow: 0 10px 30px rgba(9, 24, 60, 0.16);
 }
 
 /* ---------- Search ---------- */
@@ -33,16 +38,18 @@
 .searchInput {
   width: 100%;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  padding: 14px 42px 14px 18px;
+  border: 1px solid var(--border);
+  padding: 14px 46px 14px 18px;
   font-size: 14px;
-  border-radius: 12px;
+  border-radius: 14px;
   outline: none;
   color: #111827;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 14px 34px rgba(12, 23, 52, 0.08);
 }
 
 .searchInput::placeholder {
-  color: #9ca3af;
+  color: #8ba0bf;
 }
 
 .searchIcon {
@@ -56,7 +63,7 @@
 .searchIcon svg {
   width: 18px;
   height: 18px;
-  stroke: #9ca3af;
+  stroke: #7e90b8;
 }
 
 /* ---------- Right Section ---------- */
@@ -72,20 +79,29 @@
 .bellButton {
   width: 45px;
   height: 45px;
-  border-radius: 10px;
-  background: #ffffff;
-  border: none;
+  border-radius: 12px;
+  background: #f5f7fb;
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 24px rgba(12, 23, 52, 0.08);
+  color: #0b2f78;
+  transition: transform 0.1s ease, box-shadow 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
 }
 
 .bellButton svg {
   width: 24px;
   height: 24px;
-  stroke: #1f2937;
+  stroke: currentColor;
+}
+
+.bellButton:hover {
+  background: #ffffff;
+  border-color: rgba(11, 78, 194, 0.24);
+  box-shadow: 0 14px 30px rgba(12, 23, 52, 0.12);
+  transform: translateY(-1px);
 }
 
 /* ---------- Avatar ---------- */
@@ -112,23 +128,23 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 14px 34px rgba(12, 23, 52, 0.12);
   cursor: pointer;
   transition: box-shadow 0.12s ease, transform 0.12s ease;
-  height: 45px;
+  height: 48px;
 }
 
 .accountChip:hover {
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 18px 42px rgba(12, 23, 52, 0.22);
   transform: translateY(-1px);
 }
 
 .accountChip:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #0b4ec2;
   outline-offset: 2px;
 }
 
@@ -155,7 +171,7 @@
   width: 100%;
   height: 100%;
   border-radius: 999px;
-  background: #f1f5f9;
+  background: #e4ecf7;
   background-size: cover;
   background-position: center;
 }
@@ -166,7 +182,7 @@
 
 .accountAddress {
   font-weight: 600;
-  color: #0f172a;
+  color: #0b132b;
   font-size: 14px;
   letter-spacing: 0.01em;
   display: inline-flex;
@@ -185,19 +201,21 @@
   font-weight: 500;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     sans-serif;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #4338ca, #6366f1);
-  color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #0b2f78;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 10px 24px rgba(12, 23, 52, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.12s ease, background-color 0.12s ease, color 0.12s ease;
   white-space: nowrap;
 }
 
 .connectButton:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 14px 30px rgba(12, 23, 52, 0.14);
+  border-color: rgba(11, 78, 194, 0.24);
+  background: #f5f7fb;
 }
 
 .connectButton:disabled {

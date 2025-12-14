@@ -83,25 +83,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen = false, onClose }) => {
     <div className={styles.sidebarContainer}>
       <aside
         className={`${styles.sidebar} ${
-          isMobileOpen ? styles.sidebarOpen : ""
-        }`}
-        aria-hidden={
-          !isMobileOpen &&
-          typeof window !== "undefined" &&
-          window.innerWidth < 1200
-        }
-      >
-        <div className={styles.brand}>
-          <span className={styles.brandMark} aria-hidden="true">
-            <img src="/logoStarkGov.svg" alt="" />
-          </span>
+      isMobileOpen ? styles.sidebarOpen : ""
+    }`}
+    aria-hidden={
+      !isMobileOpen &&
+      typeof window !== "undefined" &&
+      window.innerWidth < 1200
+    }
+  >
+    <div className={styles.brandHeader}>
+      <div className={styles.brand}>
+        <span className={styles.brandMark} aria-hidden="true">
+          <img src="/logoStarkGov.svg" alt="" />
+        </span>
+        <div className={styles.brandCopy}>
           <span className={styles.brandText}>StarkGov</span>
+          <span className={styles.brandTagline}>Governance Hub</span>
         </div>
+      </div>
+    </div>
 
-        {onClose ? (
-          <button
-            type="button"
-            className={styles.closeButton}
+    {onClose ? (
+      <button
+        type="button"
+        className={styles.closeButton}
             onClick={onClose}
             aria-label="Close menu"
           >

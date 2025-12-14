@@ -1,9 +1,9 @@
 .card {
-  background: #ffffff;
-  border: 1px solid #eef0f5;
+  background: linear-gradient(155deg, #ffffff 0%, #f1f5ff 100%);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 14px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -13,7 +13,7 @@
   margin: 0;
   font-size: 14px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .line {
@@ -27,7 +27,7 @@
 .track {
   flex: 1;
   height: 5px;
-  background: linear-gradient(90deg, #cbd5f5 0%, #cbd5f5 100%);
+  background: linear-gradient(90deg, #d5e1ff 0%, #d5e1ff 100%);
   border-radius: 999px;
   position: relative;
   overflow: hidden;
@@ -39,7 +39,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(90deg, #0b4ec2 0%, #22d3ee 100%);
 }
 
 .dotStart,
@@ -48,9 +48,9 @@
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: #8b5cf6;
+  background: #0b4ec2;
   border: 2px solid #ffffff;
-  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.18);
+  box-shadow: 0 3px 10px rgba(11, 78, 194, 0.18);
 }
 
 .dotEnd {
@@ -70,7 +70,7 @@
   position: absolute;
   top: -18px;
   font-size: 10px;
-  color: #4f46e5;
+  color: #0b4ec2;
   font-weight: 700;
 }
 
@@ -90,7 +90,7 @@
 
 .labelHeading {
   font-size: 11px;
-  color: #6b7280;
+  color: #74809a;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

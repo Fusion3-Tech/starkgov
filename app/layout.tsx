@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import "./globals.scss";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/next";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Starkgov",
@@ -38,7 +53,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${manrope.variable} ${spaceGrotesk.variable}`}>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

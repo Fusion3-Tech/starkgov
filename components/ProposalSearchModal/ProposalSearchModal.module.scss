@@ -15,15 +15,16 @@
 }
 
 .modal {
-  background: #ffffff;
-  border-radius: 16px;
+  background: linear-gradient(155deg, #ffffff 0%, #f1f5ff 100%);
+  border-radius: 18px;
   width: 640px;
   max-width: 90vw;
   height: 520px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  box-shadow: var(--shadow-strong);
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border);
 }
 
 .modalHeader {
@@ -31,13 +32,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid #eef0f5;
+  border-bottom: 1px solid var(--border);
 }
 
 .modalHeader h3 {
   margin: 0;
   font-size: 16px;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .closeButton {
@@ -45,19 +46,20 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
-  color: #6b7280;
+  color: #74809a;
 }
 
 .input {
   border: none;
-  border-bottom: 1px solid #eef0f5;
+  border-bottom: 1px solid var(--border);
   padding: 12px 16px;
   font-size: 14px;
   outline: none;
+  background: #ffffff;
 }
 
 .input:focus {
-  border-color: #6366f1;
+  border-color: rgba(11, 78, 194, 0.35);
 }
 
 .results {
@@ -74,6 +76,7 @@
   text-decoration: none;
   color: #0f172a;
   border-radius: 10px;
+  transition: background 0.12s ease, transform 0.12s ease;
 }
 
 .resultRow {
@@ -105,7 +108,8 @@
 }
 
 .result:hover {
-  background: #f9fafb;
+  background: rgba(11, 78, 194, 0.05);
+  transform: translateX(2px);
 }
 
 .resultTitle {
@@ -117,7 +121,7 @@
 
 .resultMeta {
   font-size: 12px;
-  color: #6b7280;
+  color: #74809a;
   display: flex;
   gap: 6px;
   align-items: center;
@@ -130,11 +134,11 @@
 }
 
 .metaDot {
-  color: #9ca3af;
+  color: #7a89a8;
 }
 
 .empty {
   padding: 12px 16px;
-  color: #6b7280;
+  color: #74809a;
   font-size: 14px;
 }
