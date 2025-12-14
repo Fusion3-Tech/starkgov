@@ -36,10 +36,11 @@ const formatAuthor = (value?: string) => {
 };
 
 const StateBadge: React.FC<{ state?: string }> = ({ state }) => {
-  const label = state || "unknown";
+  const label = (state || "unknown").toLowerCase();
+  const displayLabel = `${label.slice(0, 1).toUpperCase()}${label.slice(1)}`;
   return (
     <span className={`${styles.badge} ${styles[`state-${label}`] || ""}`}>
-      {label}
+      {displayLabel}
     </span>
   );
 };
@@ -73,6 +74,10 @@ const ProposalPage: React.FC = () => {
     img: ({ node, src, alt, ...props }) =>
       src ? <img src={src} alt={alt ?? ""} {...props} /> : null,
   };
+
+  const totalVotesLabel = new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+  }).format(totalVotes || 0);
 
   return (
     <div className={dashboardStyles.shell}>
@@ -118,60 +123,120 @@ const ProposalPage: React.FC = () => {
           {proposal ? (
             <div className={styles.contentGrid}>
               <div className={styles.main}>
-                <h1 className={styles.title}>
-                  {proposal.title || proposal.id}
-                </h1>
-                <div className={styles.metaRow}>
-                  <div className={styles.author}>
-                    {authorBlockie ? (
-                      <img src={authorBlockie} alt={proposal.author} />
-                    ) : null}
-                    <div className={styles.authorText}>
-                      <span className={styles.authorLabel}>Author</span>
-                      <span
-                        className={styles.authorValue}
-                        title={proposal.author || undefined}
-                      >
-                        {formatAuthor(proposal.author)}
+                <div className={styles.heroCard}>
+                  <div className={styles.heroTop}>
+                    <div className={styles.pills}>
+                      <span className={styles.eyelet}>Governance proposal</span>
+                      <StateBadge state={proposal.state} />
+                    </div>
+                    <button
+                      onClick={() => refetch()}
+                      className={`${styles.refreshButton} ${styles.refreshGhost}`}
+                    >
+                      ⟳ Sync latest
+                    </button>
+                  </div>
+
+                  <h1 className={styles.title}>
+                    {proposal.title || proposal.id}
+                  </h1>
+                  <p className={styles.subtitle}>
+                    Voting window {formatDate(proposal.start)} –{" "}
+                    {formatDate(proposal.end)} • {proposal.choices?.length || 0}{" "}
+                    voting options
+                  </p>
+
+                  <div className={styles.metaGrid}>
+                    <div className={styles.metaCard}>
+                      <span className={styles.metaLabel}>Author</span>
+                      <div className={styles.authorMeta}>
+                        {authorBlockie ? (
+                          <img src={authorBlockie} alt={proposal.author} />
+                        ) : null}
+                        <div className={styles.authorText}>
+                          <span
+                            className={styles.authorValue}
+                            title={proposal.author || undefined}
+                          >
+                            {formatAuthor(proposal.author)}
+                          </span>
+                          <span className={styles.metaHint}>
+                            Proposal ID {formatAuthor(proposal.id)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={styles.metaCard}>
+                      <span className={styles.metaLabel}>Created</span>
+                      <span className={styles.metaValue}>
+                        {formatDate(proposal.created)}
+                      </span>
+                      <span className={styles.metaHint}>
+                        Opens {formatDate(proposal.start)}
+                      </span>
+                    </div>
+
+                    <div className={styles.metaCard}>
+                      <span className={styles.metaLabel}>Total votes</span>
+                      <span className={styles.metaValue}>{totalVotesLabel}</span>
+                      <span className={styles.metaHint}>
+                        For {percentages.for}% • Against {percentages.against}% •
+                        Abstain {percentages.abstain}%
+                      </span>
+                    </div>
+
+                    <div className={styles.metaCard}>
+                      <span className={styles.metaLabel}>State</span>
+                      <span className={styles.metaValue}>
+                        {proposal.state || "Unknown"}
+                      </span>
+                      <span className={styles.metaHint}>
+                        Ends {formatDate(proposal.end)}
                       </span>
                     </div>
                   </div>
-                  <div className={styles.metaItem}>
-                    <span className={styles.metaLabel}>Created</span>
-                    <span className={styles.metaValue}>
-                      {formatDate(proposal.created)}
-                    </span>
-                  </div>
-                  <div className={styles.metaItem}>
-                    <span className={styles.metaLabel}>State</span>
-                    <StateBadge state={proposal.state} />
-                  </div>
                 </div>
 
-                <article className={styles.body}>
-                  {proposal.body ? (
-                    <ReactMarkdown components={markdownComponents}>
-                      {proposal.body}
-                    </ReactMarkdown>
-                  ) : (
-                    "No description provided."
-                  )}
-                </article>
+                <div className={styles.sectionCard}>
+                  <div className={styles.sectionHeader}>
+                    <div>
+                      <p className={styles.sectionEyebrow}>Proposal overview</p>
+                      <h2 className={styles.sectionTitle}>Context & details</h2>
+                    </div>
+                  </div>
+                  <article className={styles.body}>
+                    {proposal.body ? (
+                      <ReactMarkdown components={markdownComponents}>
+                        {proposal.body}
+                      </ReactMarkdown>
+                    ) : (
+                      "No description provided."
+                    )}
+                  </article>
+                </div>
 
-                <DiscussionSection
-                  proposalId={proposal?.id}
-                  proposalState={proposal.state}
-                />
+                <div className={styles.sectionCard}>
+                  <div className={styles.sectionHeader}>
+                    <div>
+                      <p className={styles.sectionEyebrow}>Community signals</p>
+                      <h2 className={styles.sectionTitle}>Discussion</h2>
+                    </div>
+                  </div>
+                  <DiscussionSection
+                    proposalId={proposal?.id}
+                    proposalState={proposal.state}
+                  />
+                </div>
               </div>
 
               <aside className={styles.sidebar}>
-                <div className={styles.card}>
-                  <ProposalTimeline start={proposal.start} end={proposal.end} />
-                </div>
+                <ProposalTimeline start={proposal.start} end={proposal.end} />
 
-                <div className={styles.card}>
-                  <ProposalQuorum quorum={proposal.quorum} scoresTotal={proposal.scores_total} />
-                </div>
+                <ProposalQuorum
+                  quorum={proposal.quorum}
+                  scoresTotal={proposal.scores_total}
+                />
 
                 <ProposalChoices
                   choices={proposal.choices || []}
@@ -179,17 +244,15 @@ const ProposalPage: React.FC = () => {
                   totalVotes={totalVotes}
                 />
 
-                <div className={styles.card}>
-                  <ProposalExecutionInfo
-                    executed={proposal.executed}
-                    executedAt={proposal.execution_time}
-                    executionData={proposal.execution_strategy}
-                    strategy={proposal.execution_strategy}
-                    strategyType={proposal.execution_strategy_type}
-                    destination={proposal.execution_destination}
-                    txHash={proposal.execution_tx}
-                  />
-                </div>
+                <ProposalExecutionInfo
+                  executed={proposal.executed}
+                  executedAt={proposal.execution_time}
+                  executionData={proposal.execution_strategy}
+                  strategy={proposal.execution_strategy}
+                  strategyType={proposal.execution_strategy_type}
+                  destination={proposal.execution_destination}
+                  txHash={proposal.execution_tx}
+                />
               </aside>
             </div>
           ) : null}
