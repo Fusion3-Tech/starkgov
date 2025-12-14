@@ -1,5 +1,5 @@
 .page {
-  padding: 24px 28px 40px;
+  padding: 28px 30px 44px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -57,18 +57,12 @@
   border: 1px solid rgba(11, 78, 194, 0.2);
   border-radius: 12px;
   padding: 10px 14px;
-  background: linear-gradient(120deg, #0b4ec2, #1168ff);
+  background: rgba(255, 255, 255, 0.92);
   cursor: pointer;
-  color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 18px 40px rgba(11, 78, 194, 0.22);
-  letter-spacing: 0.01em;
-}
-
-.refreshGhost {
-  background: rgba(255, 255, 255, 0.86);
   color: #0b4ec2;
-  box-shadow: 0 10px 26px rgba(11, 78, 194, 0.1);
+  font-weight: 700;
+  box-shadow: 0 12px 32px rgba(11, 78, 194, 0.12);
+  letter-spacing: 0.01em;
 }
 
 .status {
@@ -106,21 +100,17 @@
 
 .heroCard {
   position: relative;
-  background:
-    radial-gradient(120% 140% at 10% 10%, rgba(17, 104, 255, 0.08), transparent 50%),
-    radial-gradient(110% 140% at 90% 0%, rgba(34, 211, 238, 0.1), transparent 44%),
-    rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(11, 78, 194, 0.12);
-  border-radius: 26px;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fbff 60%, #f1f6ff 100%);
+  border: 1px solid rgba(11, 78, 194, 0.08);
+  border-radius: 22px;
   padding: 20px;
-  box-shadow: 0 24px 70px rgba(12, 23, 52, 0.18);
-  backdrop-filter: blur(6px);
+  box-shadow: 0 18px 46px rgba(12, 23, 52, 0.12);
+  backdrop-filter: blur(4px);
 }
 
 .heroTop {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   margin-bottom: 8px;
 }
@@ -146,7 +136,7 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
   color: #0a1024;
   margin: 4px 0 6px;
@@ -155,24 +145,24 @@
 }
 
 .subtitle {
-  margin: 0 0 14px;
-  font-size: 15px;
+  margin: 0 0 12px;
+  font-size: 14px;
   color: #4c5972;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .metaCard {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(11, 78, 194, 0.12);
-  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(11, 78, 194, 0.08);
+  border-radius: 16px;
   padding: 12px;
-  box-shadow: 0 14px 32px rgba(12, 23, 52, 0.08);
+  box-shadow: 0 12px 28px rgba(12, 23, 52, 0.08);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -266,11 +256,11 @@
 }
 
 .sectionCard {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(11, 78, 194, 0.12);
-  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(11, 78, 194, 0.08);
+  border-radius: 18px;
   padding: 18px;
-  box-shadow: 0 20px 50px rgba(12, 23, 52, 0.12);
+  box-shadow: 0 16px 40px rgba(12, 23, 52, 0.08);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -292,15 +282,15 @@
 
 .sectionTitle {
   margin: 2px 0 0;
-  font-size: 20px;
+  font-size: 18px;
   color: #0a1024;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 .body {
   font-size: 15px;
-  line-height: 1.7;
-  color: #0f172a;
+  line-height: 1.75;
+  color: #101828;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -437,11 +427,11 @@
 }
 
 .commentBody {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(11, 78, 194, 0.12);
+  background: #ffffff;
+  border: 1px solid rgba(11, 78, 194, 0.08);
   border-radius: 14px;
   padding: 12px 14px;
-  box-shadow: 0 12px 26px rgba(12, 23, 52, 0.08);
+  box-shadow: 0 10px 22px rgba(12, 23, 52, 0.08);
   word-break: break-word;
   overflow-wrap: anywhere;
 }

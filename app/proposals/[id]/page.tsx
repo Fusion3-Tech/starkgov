@@ -129,12 +129,6 @@ const ProposalPage: React.FC = () => {
                       <span className={styles.eyelet}>Governance proposal</span>
                       <StateBadge state={proposal.state} />
                     </div>
-                    <button
-                      onClick={() => refetch()}
-                      className={`${styles.refreshButton} ${styles.refreshGhost}`}
-                    >
-                      ⟳ Sync latest
-                    </button>
                   </div>
 
                   <h1 className={styles.title}>
@@ -183,16 +177,6 @@ const ProposalPage: React.FC = () => {
                       <span className={styles.metaHint}>
                         For {percentages.for}% • Against {percentages.against}% •
                         Abstain {percentages.abstain}%
-                      </span>
-                    </div>
-
-                    <div className={styles.metaCard}>
-                      <span className={styles.metaLabel}>State</span>
-                      <span className={styles.metaValue}>
-                        {proposal.state || "Unknown"}
-                      </span>
-                      <span className={styles.metaHint}>
-                        Ends {formatDate(proposal.end)}
                       </span>
                     </div>
                   </div>
