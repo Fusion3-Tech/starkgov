@@ -8,6 +8,7 @@ import {
   type ProposalComment,
   useProposalComments,
 } from "@/hooks/useProposalComments";
+import { getBlockieDataUrl } from "@/lib/blockies";
 
 const commentMarkdownComponents: Components = {
   h1: ({ children }) => <p>{children}</p>,
@@ -79,6 +80,7 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
   const [commentPage, setCommentPage] = useState(1);
   const [commentList, setCommentList] = useState<ProposalComment[]>([]);
   const [commentSort, setCommentSort] = useState<"date" | "upvotes">("date");
+  const isClosed = proposalState !== "active" && proposalState !== "pending";
 
   const {
     comments,
@@ -121,6 +123,17 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
     void refetchComments();
   };
 
+  const identSeedFromComment = (comment: ProposalComment, fallback: string) => {
+    if (typeof comment.author === "string") return comment.author;
+    return (
+      comment.author?.publicIdentifier ||
+      comment.author?.address ||
+      comment.author?.ethAddress ||
+      comment.author?.starknetAddress ||
+      fallback
+    );
+  };
+
   const renderComment = (comment: ProposalComment, depth = 0) => {
     const displayName = commentAuthorLabel(comment.author);
     const shortId =
@@ -138,6 +151,9 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
       typeof comment.netVotes === "number"
         ? comment.netVotes
         : (comment.upvotes || 0) - (comment.downvotes || 0);
+    const identSeed = identSeedFromComment(comment, displayName);
+    const avatarSrc = identSeed ? getBlockieDataUrl(identSeed) : "";
+    const initial = displayName.slice(0, 1).toUpperCase();
 
     return (
       <li
@@ -148,7 +164,15 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
           className={styles.commentAvatar}
           style={{ backgroundColor: avatarColorFromString(displayName) }}
         >
-          {displayName.slice(0, 1).toUpperCase()}
+          {avatarSrc ? (
+            <img
+              src={avatarSrc}
+              alt={`${displayName} avatar`}
+              className={styles.commentAvatarImg}
+            />
+          ) : (
+            <span className={styles.commentAvatarInitial}>{initial}</span>
+          )}
         </div>
         <div className={styles.commentBody}>
           <div className={styles.commentHeader}>
@@ -189,7 +213,18 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
   return (
     <div className={styles.commentsSection}>
       <div className={styles.commentsHeader}>
-        <h2>Discussion</h2>
+        <div className={styles.commentsTitleBlock}>
+          <p className={styles.sectionEyebrow}>Community discussion</p>
+          <div className={styles.commentsTitleRow}>
+            <h2>Discussion</h2>
+            <span className={styles.commentCount}>
+              {commentList.length} comment{commentList.length === 1 ? "" : "s"}
+            </span>
+            {isClosed ? (
+              <span className={styles.commentStatus}>Closed</span>
+            ) : null}
+          </div>
+        </div>
         <div className={styles.sortRow}>
           <span className={styles.sortLabel}>Sort by</span>
           <select
@@ -203,7 +238,7 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
         </div>
       </div>
 
-      {proposalState !== "active" && proposalState !== "pending" ? (
+      {isClosed ? (
         <div className={styles.closedBanner}>
           <span className={styles.closedIcon}>ℹ</span>
           Comments are now closed.
@@ -240,7 +275,7 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
           onClick={handleLoadMoreComments}
           disabled={commentsLoading}
         >
-          Load more comments
+          Load more
         </button>
       ) : null}
       <div className={styles.commentsFooter}>
