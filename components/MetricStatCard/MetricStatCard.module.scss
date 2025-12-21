@@ -1,9 +1,9 @@
 .card {
-  background: linear-gradient(155deg, #ffffff 0%, #f2f5ff 100%);
-  border-radius: 18px;
+  background: var(--surface);
+  border-radius: 10px;
   padding: 18px 18px 16px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border);
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
   font-family: var(--font-body, system-ui, -apple-system, 'SF Pro Text', sans-serif);
 }
 
@@ -79,5 +79,5 @@
 }
 
 .description {
-  color: #74809a;
+  color: var(--muted);
 }

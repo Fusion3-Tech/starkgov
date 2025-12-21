@@ -9,17 +9,17 @@
   align-items: center;
   gap: 12px;
   background: var(--surface-subtle);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
   padding: 10px 12px;
-  box-shadow: var(--shadow-soft);
+  box-shadow: none;
   justify-content: space-between;
 }
 
 .tabs {
   display: inline-flex;
-  border-radius: 12px;
-  background: rgba(11, 78, 194, 0.06);
+  border-radius: 8px;
+  background: rgba(var(--primary-rgb), 0.06);
   padding: 4px;
   gap: 6px;
 }
@@ -31,23 +31,23 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  color: #4c5972;
-  border-radius: 10px;
+  color: var(--muted-strong);
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
 .tabActive {
-  background: #ffffff;
-  color: #0b132b;
-  box-shadow: 0 10px 24px rgba(12, 23, 52, 0.12);
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: none;
 }
 
 .actionButton {
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: #ffffff;
-  color: #4c5972;
+  background: var(--surface);
+  color: var(--muted-strong);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -60,9 +60,9 @@
 
 .actionButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(12, 23, 52, 0.12);
-  background: rgba(11, 78, 194, 0.05);
-  border-color: rgba(11, 78, 194, 0.28);
+  box-shadow: none;
+  background: rgba(var(--primary-rgb), 0.05);
+  border-color: rgba(var(--primary-rgb), 0.28);
 }
 
 .actionButton:active {
@@ -81,13 +81,13 @@
   width: 100%;
   height: 100%;
   fill: none;
-  stroke: #7a89a8;
+  stroke: var(--muted);
   stroke-width: 1.8;
 }
 
 .actionActive .actionIcon svg {
-  fill: #0b4ec2;
-  stroke: #0b4ec2;
+  fill: var(--accent);
+  stroke: var(--accent);
 }
 
 .hidden {

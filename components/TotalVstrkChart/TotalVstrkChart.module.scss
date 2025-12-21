@@ -1,9 +1,9 @@
 .card {
-  background: linear-gradient(155deg, #ffffff 0%, #f2f6ff 100%);
-  border-radius: 20px;
+  background: var(--surface);
+  border-radius: 12px;
   padding: 16px 20px 18px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border);
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
   font-family: var(--font-body, system-ui, -apple-system, "SF Pro Text",
     sans-serif);
 }
@@ -27,7 +27,7 @@
   border-radius: 999px;
   border: 1px solid var(--border);
   font-size: 11px;
-  color: #6b7280;
+  color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,27 +45,27 @@
 
 .empty {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--muted);
   margin-top: 6px;
 }
 
 /* Tooltip style */
 
 .tooltip {
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: 8px;
   padding: 10px 12px;
-  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.16);
+  box-shadow: none;
   border: 1px solid var(--border);
 }
 
 .tooltipValue {
   font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .tooltipSub {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--muted-soft);
 }

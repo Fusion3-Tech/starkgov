@@ -9,11 +9,11 @@
 }
 
 .modal {
-  background: linear-gradient(155deg, #ffffff 0%, #f1f5ff 100%);
-  border-radius: 18px;
+  background: var(--surface);
+  border-radius: 10px;
   width: min(520px, 92vw);
   padding: 20px;
-  box-shadow: var(--shadow-strong);
+  box-shadow: none;
   border: 1px solid var(--border);
 }
 
@@ -35,7 +35,7 @@
   border: none;
   font-size: 22px;
   cursor: pointer;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .walletList {
@@ -53,21 +53,21 @@
 }
 
 .currentLabel {
-  color: #74809a;
+  color: var(--muted);
 }
 
 .currentValue {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--foreground);
   word-break: break-all;
 }
 
 .disconnectButton {
   margin-left: auto;
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--surface);
   cursor: pointer;
   font-weight: 600;
   color: #ef4444;
@@ -78,11 +78,11 @@
   align-items: center;
   justify-content: space-between;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 12px 14px;
   gap: 12px;
-  background: #ffffff;
-  box-shadow: var(--shadow-soft);
+  background: var(--surface);
+  box-shadow: none;
 }
 
 .walletRowDisabled {
@@ -100,8 +100,8 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(11, 78, 194, 0.08);
-  color: #0f172a;
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--foreground);
   display: grid;
   place-items: center;
   font-weight: 700;
@@ -113,7 +113,7 @@
 
 .walletName {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .walletInfo > div {
@@ -131,7 +131,7 @@
 
 .walletDesc {
   font-size: 12px;
-  color: #74809a;
+  color: var(--muted);
 }
 
 .walletActions {
@@ -146,37 +146,39 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 10px;
-  background: rgba(11, 78, 194, 0.08);
-  color: #0b132b;
+  border-radius: 6px;
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--foreground);
   text-decoration: none;
   font-size: 14px;
 }
 
 .connectButton {
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: 6px;
   border: none;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  color: #0b2f78;
+  background: var(--accent);
+  border: 1px solid transparent;
+  color: var(--accent-contrast);
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.1s ease, opacity 0.1s ease;
   white-space: nowrap;
-  box-shadow: 0 10px 24px rgba(12, 23, 52, 0.08);
+  box-shadow: none;
 }
 
 .connectButton:disabled {
   cursor: not-allowed;
-  background: #9ca3af;
+  background: var(--surface-muted);
+  color: var(--muted-soft);
   opacity: 0.8;
+  border-color: var(--border);
 }
 
 .connectButton:not(:disabled):hover {
   transform: translateY(-1px);
-  border-color: rgba(11, 78, 194, 0.24);
-  background: #f5f7fb;
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
 }
 
 @media (max-width: 520px) {

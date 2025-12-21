@@ -1,9 +1,9 @@
 .card {
-  background: linear-gradient(155deg, #ffffff 0%, #f2f5ff 100%);
-  border-radius: 20px;
+  background: var(--surface);
+  border-radius: 12px;
   padding: 18px 16px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border);
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
   font-family: var(--font-body, system-ui, -apple-system, 'SF Pro Text', sans-serif);
 }
 
@@ -37,12 +37,12 @@
   text-decoration: none;
   color: inherit;
   display: block;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: background 0.15s ease, transform 0.12s ease;
 }
 
 .rowLink:hover {
-  background: rgba(11, 78, 194, 0.05);
+  background: rgba(var(--primary-rgb), 0.05);
   transform: translateX(2px);
 }
 
@@ -57,8 +57,8 @@
 .avatar {
   width: 42px;
   height: 42px;
-  border-radius: 14px;
-  background: #dbeafe;
+  border-radius: 999px;
+  background: var(--surface-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,7 +73,7 @@
 
 .avatarFallback {
   font-size: 11px;
-  color: #475569;
+  color: var(--muted-strong);
   padding: 0 6px;
   text-align: center;
 }
@@ -109,7 +109,7 @@
 
 .date {
   font-size: 12px;
-  color: #74809a;
+  color: var(--muted);
 }
 
 .badge {
@@ -122,7 +122,7 @@
 
 .empty {
   font-size: 13px;
-  color: #74809a;
+  color: var(--muted);
   padding: 6px 2px;
 }
 
