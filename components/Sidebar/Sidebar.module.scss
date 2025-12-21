@@ -9,16 +9,16 @@
 .sidebar {
   width: 260px;
   height: 96vh;
-  background: #ffffff;
-  border-radius: 26px;
+  background: var(--surface);
+  border-radius: 12px;
   padding: 26px 20px 28px;
   display: flex;
   flex-direction: column;
   gap: 26px;
   box-sizing: border-box;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border);
-  color: #0b132b;
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
+  color: var(--foreground);
   position: relative;
   z-index: 201; /* Sidebar above everything */
 }
@@ -35,7 +35,7 @@
 .brand {
   font-size: 23px;
   font-weight: 800;
-  color: #0b132b;
+  color: var(--foreground);
   font-family: var(--font-display, var(--font-body, sans-serif));
   display: inline-flex;
   align-items: center;
@@ -50,18 +50,16 @@
 .brandMark {
   width: 48px;
   height: 48px;
-  border-radius: 16px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid rgba(11, 78, 194, 0.2);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
   background:
-    linear-gradient(145deg, rgba(34, 211, 238, 0.16), rgba(11, 78, 194, 0.16)),
-    #f3f7ff;
-  box-shadow:
-    0 10px 24px rgba(11, 78, 194, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.16), rgba(var(--primary-rgb), 0.16)),
+    var(--surface-muted);
+  box-shadow: none;
   flex-shrink: 0;
 }
 
@@ -86,7 +84,7 @@
 
 .brandTagline {
   font-size: 11px;
-  color: #5c6e92;
+  color: var(--muted);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
@@ -100,10 +98,10 @@
   justify-content: center;
   padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(11, 78, 194, 0.22);
-  background: #f2f6ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  color: #0b132b;
+  border: 1px solid rgba(var(--primary-rgb), 0.22);
+  background: var(--surface-muted);
+  box-shadow: none;
+  color: var(--foreground);
   font-size: 13px;
   letter-spacing: 0.01em;
   font-weight: 600;
@@ -122,11 +120,11 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px 12px 12px;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: #ffffff;
+  background: var(--surface);
   cursor: pointer;
-  color: #0b132b;
+  color: var(--foreground);
   font-size: 14px;
   font-weight: 700;
   text-align: left;
@@ -135,16 +133,16 @@
 }
 
 .navItemActive {
-  background: rgba(11, 78, 194, 0.08);
-  color: #0b132b;
-  border: 1px solid rgba(11, 78, 194, 0.28);
-  box-shadow: 0 14px 30px rgba(12, 40, 96, 0.15);
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--foreground);
+  border: 1px solid rgba(var(--primary-rgb), 0.28);
+  box-shadow: none;
 }
 
 .navItem:hover:not(.navItemActive):not(.navItemDisabled) {
-  background: #f5f7fb;
-  color: #0b132b;
-  border-color: rgba(11, 78, 194, 0.18);
+  background: var(--surface-muted);
+  color: var(--foreground);
+  border-color: rgba(var(--primary-rgb), 0.18);
   transform: translateY(-1px);
 }
 
@@ -182,9 +180,9 @@
   height: 22px;
   padding: 0 6px;
   border-radius: 999px;
-  background: rgba(11, 78, 194, 0.1);
-  color: #0b132b;
-  border: 1px solid rgba(11, 78, 194, 0.2);
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--foreground);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
   font-size: 11px;
   font-weight: 600;
   display: inline-flex;
@@ -198,7 +196,7 @@
 
 .settingsTitle {
   font-size: 13px;
-  color: #7a89a8;
+  color: var(--muted);
   margin-bottom: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -217,7 +215,7 @@
 .reportLabel {
   font-size: 12px;
   font-weight: 700;
-  color: #0b132b;
+  color: var(--foreground);
   letter-spacing: 0.02em;
 }
 
@@ -232,12 +230,12 @@
   align-items: center;
   gap: 6px;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  background: #f7f9fc;
+  background: var(--surface-muted);
   font-size: 12px;
   font-weight: 700;
-  color: #0b132b;
+  color: var(--foreground);
   transition: transform 0.12s ease, border-color 0.12s ease,
     background-color 0.12s ease, color 0.12s ease;
 }
@@ -245,15 +243,15 @@
 .reportLink:hover {
   transform: translateY(-1px);
   border-color: rgba(15, 23, 42, 0.16);
-  background: #ffffff;
-  color: #0b2f78;
+  background: var(--surface);
+  color: var(--primary-strong);
 }
 
 .reportIcon {
   width: 14px;
   height: 14px;
   display: inline-flex;
-  color: #0f172a;
+  color: var(--foreground);
 }
 
 .reportIcon svg {
@@ -266,7 +264,7 @@
 /* MOBILE STYLES */
 .closeButton {
   display: none;
-  color: #0b132b;
+  color: var(--foreground);
 }
 
 .backdrop {
@@ -287,9 +285,9 @@
     width: 42vw;
     min-width: 270px;
     max-width: 420px;
-    border-radius: 0 22px 22px 0;
+    border-radius: 0 12px 12px 0;
     padding: 26px 20px 32px;
-    box-shadow: 0 24px 70px rgba(7, 14, 36, 0.45);
+    box-shadow: none;
     transform: translateX(-110%);
     transition: transform 0.25s ease;
     z-index: 300; /* even higher for mobile */
@@ -307,8 +305,8 @@
     height: 24px;
     border-radius: 999px;
     border: none;
-    background: #f1f5f9;
-    color: #0f172a;
+    background: var(--surface-raise);
+    color: var(--foreground);
     position: absolute;
     top: 14px;
     right: 14px;
