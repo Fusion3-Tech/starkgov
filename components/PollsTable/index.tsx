@@ -196,8 +196,12 @@ const PollsTable: React.FC<PollsTableProps> = ({
                 </div>
 
                 <div className={styles.titleCell}>{poll.title || poll.id}</div>
-                <div className={styles.dateCell}>{formatDate(poll.start)}</div>
-                <div className={styles.dateCell}>{formatDate(poll.end)}</div>
+                <div className={`${styles.dateCell} ${styles.dateStart}`}>
+                  {formatDate(poll.start)}
+                </div>
+                <div className={`${styles.dateCell} ${styles.dateEnd}`}>
+                  {formatDate(poll.end)}
+                </div>
                 <div className={styles.stateCell}>
                   <span className={styles.stateBadge}>{poll.state || "—"}</span>
                 </div>

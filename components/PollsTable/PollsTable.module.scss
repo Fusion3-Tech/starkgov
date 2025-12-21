@@ -314,6 +314,11 @@
     align-items: flex-start;
   }
 
+  .headerControls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .tableHeader {
     display: none;
   }
@@ -342,13 +347,106 @@
     padding: 16px;
   }
 
+  .headerControls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .sortWrapper {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .searchWrapper {
+    width: 100%;
+  }
+
+  .tableBody {
+    overflow: visible;
+    padding-bottom: 16px;
+  }
+
   .row {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "account fav"
+      "title title"
+      "start end"
+      "status status";
+    row-gap: 10px;
+    align-items: start;
+  }
+
+  .accountCell {
+    grid-area: account;
+  }
+
+  .titleCell {
+    grid-area: title;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .dateStart {
+    grid-area: start;
+  }
+
+  .dateEnd {
+    grid-area: end;
+  }
+
+  .dateCell {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .dateStart::before,
+  .dateEnd::before {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dateStart::before {
+    content: "Start";
+  }
+
+  .dateEnd::before {
+    content: "End";
+  }
+
+  .stateCell {
+    grid-area: status;
+  }
+
+  .stateBadge {
+    font-size: 10px;
+    padding: 5px 8px;
   }
 
   .favCell {
-    justify-content: flex-start;
+    grid-area: fav;
+    justify-content: flex-end;
+    align-self: start;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .favButton {
+    width: 32px;
+    height: 32px;
+  }
+
+  .favButton svg {
+    width: 16px;
+    height: 16px;
   }
 }
